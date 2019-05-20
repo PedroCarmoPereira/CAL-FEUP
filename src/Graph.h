@@ -9,6 +9,7 @@
 #include <list>
 #include <limits>
 #include <cmath>
+#include "MutablePriorityQueue.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ class Vertex {
 	bool visited;          // auxiliary field
 	double dist = 0;
 	Vertex<T> *path = NULL;
-
+	int queueIndex = 0;
 	bool processing = false;
 	void addEdge(Vertex<T> *dest, double w);
 
@@ -39,6 +40,7 @@ public:
 	Vertex *getPath() const;
 	bool removeEdgeTo(Vertex<T> *d);
 	friend class Graph<T>;
+	friend class MutablePriorityQueue<Vertex<T>> ;
 };
 
 
@@ -95,6 +97,8 @@ Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
 template <class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;    // vertex set
+	double ** W = nullptr; // dist
+	int **P = nullptr; // path
 
 public:
 	Vertex<T> *findVertex(const T &in) const;
@@ -107,8 +111,11 @@ public:
 	vector<T> bfs(const T & source) const;
 	int getNumVertex() const;
 	vector<Vertex<T> *> getVertexSet() const;
-
+	~Graph();
+	Vertex<T> * initSingleSource(const T &origin);
+	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 	void dijkstraShortestPath(const T &s);
+	int findVertexIdx(const T &in) const;
 	void floydWarshallShortestPath();
 	vector<T> getPath(const T &origin, const T &dest) const;
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
@@ -281,18 +288,129 @@ vector<T> Graph<T>::bfs(const T & source) const {
 
 
 
-/**************** Single Source Shortest Path algorithms ************/
+/**************** DIJKSTRA ************/
+template<class T>
+Vertex<T> * Graph<T>::initSingleSource(const T &origin) {
+	for (auto v : vertexSet) {
+		v->dist = INF;
+		v->path = nullptr;
+	}
+	auto s = findVertex(origin);
+	s->dist = 0;
+	return s;
+}
+
+template<class T>
+bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight) {
+	if (v->dist + weight < w->dist) {
+		w->dist = v->dist + weight;
+		w->path = v;
+		return true;
+	}
+	else return false;
+}
+
 
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
-	// TODO
+	auto s = initSingleSource(origin);
+	MutablePriorityQueue<Vertex<T>> q;
+	q.insert(s);
+	while ( ! q.empty() ) {
+		auto v = q.extractMin();
+		for (auto e : v->adj) {
+			auto oldDist = e.dest->dist;
+			if (relax(v, e.dest, e.weight)) {
+				if (oldDist == INF)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+	}
 }
 
+template<class T>
+vector<T> Graph<T>::getPath(const T &origin, const T &dest) const {
+	vector<T> res;
+	auto v = findVertex(dest);
+	if (v == nullptr || v->dist == INF) // missing or disconnected
+		return res;
+	for ( ; v != nullptr; v = v->path)
+		res.push_back(v->info);
+	reverse(res.begin(), res.end());
+	return res;
+}
 /**************** All Pairs Shortest Path  ***************/
 
+template <class T>
+int Graph<T>::findVertexIdx(const T &in) const {
+for (unsigned i = 0; i < vertexSet.size(); i++)
+if (vertexSet[i]->info == in)
+return i;
+return -1;
+}
+
+template <class T>
+void deleteMatrix(T **m, int n) {
+	if (m != nullptr) {
+		for (int i = 0; i < n; i++)
+			if (m[i] != nullptr)
+				delete [] m[i];
+			delete [] m;
+	}
+}
+
+template <class T>
+Graph<T>::~Graph() {
+	deleteMatrix(W, vertexSet.size());
+	deleteMatrix(P, vertexSet.size());
+}
 template<class T>
 void Graph<T>::floydWarshallShortestPath() {
-	// TODO
+	unsigned n = vertexSet.size();
+	deleteMatrix(W, n);
+	deleteMatrix(P, n);
+	W = new double *[n];
+	P = new int *[n];
+	for (unsigned i = 0; i < n; i++) {
+		W[i] = new double[n];
+		P[i] = new int[n];
+		for (unsigned j = 0; j < n; j++) {
+			W[i][j] = i == j? 0 : INF;
+			P[i][j] = -1;
+		}
+		for (auto e : vertexSet[i]->adj) {
+			int j = findVertexIdx(e.dest->info);
+			W[i][j] = e.weight;
+			P[i][j] = i;
+		}
+	}
+	for(unsigned k = 0; k < n; k++)
+		for(unsigned i = 0; i < n; i++)
+			for(unsigned j = 0; j < n; j++) {
+				if(W[i][k] == INF || W[k][j] == INF)
+					continue; // avoid overflow
+				int val = W[i][k] + W[k][j];
+				if (val < W[i][j]) {
+					W[i][j] = val;
+					P[i][j] = P[k][j];
+				}
+			}
+}
+
+
+template<class T>
+vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
+	vector<T> res;
+	int i = findVertexIdx(orig);
+	int j = findVertexIdx(dest);
+	if (i == -1 || j == -1 || W[i][j] == INF) // missing or disconnected
+		return res;
+	for ( ; j != -1; j = P[i][j])
+		res.push_back(vertexSet[j]->info);
+	reverse(res.begin(), res.end());
+	return res;
 }
 
 
