@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <sstream>
+#include <cmath>
 #include <fstream>
 
 using namespace std;
@@ -70,9 +71,9 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 	
 	ifstream fnodes;
 	int nNodes;
-	double nodeID;
-	double nodeX;
-	double nodeY;
+	int nodeID;
+	int nodeX;
+	int nodeY;
 
 	//open node file
 	fnodes.open(nodeFile);
@@ -88,14 +89,16 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 
 	while (getline (fnodes,line)){
 
-		nodeID = atof(strtok((char*)line.c_str(), "(,"));
+		nodeID = floor(atof(strtok((char*)line.c_str(), "(,")));
 
-		nodeX = atof(strtok(NULL, "(,)"));
+		nodeX = floor(atof(strtok(NULL, "(,)"))) - 565000;
 
-		nodeY = atof(strtok(NULL, "(,)"));
+		nodeY = floor(atof(strtok(NULL, "(,)"))) - 4570000;
 
 		gv->addNode(nodeID, nodeX, nodeY);
+		
 	}
+
 
 	fnodes.close();
 
@@ -118,15 +121,15 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 
 	while (getline (fedges,line)){
 
-		node1 = atof(strtok((char*)line.c_str(), "(,"));
+		node1 = floor(atof(strtok((char*)line.c_str(), "(,")));
 
-		node2 = atof(strtok(NULL, "(,)"));
+		node2 = floor(atof(strtok(NULL, "(,)")));
 
-		gv->addEdge(index, node1, node2, EdgeType::DIRECTED);
+		gv->addEdge(index, node1, node2, EdgeType::UNDIRECTED);
 		index++;
 	}
 
 	fedges.close();
-
 	gv->rearrange();
+
 }
