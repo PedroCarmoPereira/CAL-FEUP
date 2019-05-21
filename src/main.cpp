@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "utils.h"
 #include "graphviewer.h"
 #include "User.h"
@@ -8,7 +9,7 @@ using namespace std;
 
 bool var_exit = false;
 
-void insertUser(){
+void insertUser(vector<User>& v){
 	int id;
 	cout << "id:"; 
 	cin >> id;
@@ -25,21 +26,6 @@ void insertUser(){
 	cout << "destination y_or_lon:";
 	cin >> d.y_or_lon;
 
-	simple_time_t dep;
-	cout << "departure hour:";
-	cin >> dep.hour;
-	cout << "departure min:";
-	cin >> dep.min;
-	cout << "departure pastMidnight 1-true/0-false:";
-	cin >> dep.pastMidnight;
-
-	simple_time_t arr;
-	cout << "arrival hour:";
-	cin >> arr.hour;
-	cout << "arrival min:";
-	cin >> arr.min;
-	cout << "arrival pastMidnight 1-true/0-false:";
-	cin >> arr.pastMidnight;
 
 	int dT;
 	cout << "destiantination tolerance:"; 
@@ -50,12 +36,15 @@ void insertUser(){
 	cin >> aT;
 	
 
-	//User u = User( id, s, d, dep, arr, dT, aT);
+	User u = User( id, s, d, dT, aT);
+	v.push_back(u);
 
 }
 
-void displayUsers(){
-    cout << "(...)\n" << endl;
+void displayUsers(vector<User> v){
+    for (auto u: v){
+		cout << u.getId() << endl;
+	}
 
 }
 
@@ -65,16 +54,16 @@ int main(){
 	//cout << nodeFile << endl;
 	//cout << edgeFile << endl;
 
-	GraphViewer *gv = new GraphViewer(600, 600, false);
+	/*GraphViewer *gv = new GraphViewer(600, 600, false);
 	gv->createWindow(600, 600);
 	gv->defineVertexColor("blue");
 	gv->defineEdgeColor("black");
 	//gv->closeWindow();
 
-	readFiles(gv, nodeFile, edgeFile);
+	readFiles(gv, nodeFile, edgeFile);*/
 
 /**************************************  MENU  ***********************************************/
-
+	vector<User> v;
 	while(!var_exit){
 
 		cout << "Welcome to RideSharing! Please choose a option." << endl;
@@ -86,11 +75,11 @@ int main(){
 		switch (s)
 		{
 		case 1:
-			insertUser();
+			insertUser(v);
 			cout << endl;
 			break;
 		case 2:
-			displayUsers();
+			displayUsers(v);
 			cout << endl;
 			break;
 		case 3:
@@ -99,13 +88,15 @@ int main(){
 			break;
 		default:
 			cout << "Invalid Option!\n" << endl;
+			cin.clear();
+			cin.ignore();
 			break;
 		}
 	}
 
 /*********************************************************************************************/
 	//getchar();
-	gv->closeWindow();
+	//gv->closeWindow();
 
 	return 0;
 }
