@@ -2,12 +2,12 @@
 #define _GRAPH_VIEWER_H_
 
 #ifdef linux
-#include <unistd.h>
+	#include <unistd.h>
 #elif __APPLE__
-#include <unistd.h>
+	#include <unistd.h>
 #else
-#include <winsock2.h>
-#include <Windows.h>
+	#include <winsock2.h>
+	#include <Windows.h>
 #endif
 
 #include <stdlib.h>

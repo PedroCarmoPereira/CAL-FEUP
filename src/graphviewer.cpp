@@ -1,13 +1,13 @@
 #include "graphviewer.h"
 #include <string>
-#include<sstream>
+#include <sstream>
 
 #ifdef linux
 pid_t GraphViewer::procId = NULL;
 #elif __APPLE__
-pid_t GraphViewer::procId = NULL;
+pid_t GraphViewer::procId = 0;
 #endif
-short GraphViewer::port = 7772;
+short GraphViewer::port = 4775;
 
 GraphViewer::GraphViewer(int width, int height, bool dynamic) {
 	initialize(width, height, dynamic, GraphViewer::port);
