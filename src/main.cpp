@@ -1,8 +1,12 @@
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
 int main(){
-	cout << "Hello, muchachos!" << endl;
+	string nodeFile, edgeFile;
+	setFiles(PORTUGAL, nodeFile, edgeFile);
+	cout << nodeFile << endl;
+	cout << edgeFile << endl;
 	return 0;
 }
