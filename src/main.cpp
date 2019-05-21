@@ -2,12 +2,8 @@
 #include <vector>
 #include "utils.h"
 #include "graphviewer.h"
-<<<<<<< HEAD
-#include "Graph.h"
-=======
 #include "User.h"
-
->>>>>>> b21cc8c6d7027c3ebdb2159d64b91d53841b9815
+#include "Graph.h"
 
 using namespace std;
 
@@ -58,7 +54,6 @@ int main(){
 	//cout << nodeFile << endl;
 	//cout << edgeFile << endl;
 
-<<<<<<< HEAD
 	// GraphViewer *gv = new GraphViewer(600, 600, false);
 	// gv->createWindow(600, 600);
 	// gv->defineVertexColor("blue");
@@ -68,7 +63,6 @@ int main(){
 	Graph <Coords> rideSharing = readFiles(nodeFile, edgeFile);
 	getchar();
 	//gv->closeWindow();
-=======
 	/*GraphViewer *gv = new GraphViewer(600, 600, false);
 	gv->createWindow(600, 600);
 	gv->defineVertexColor("blue");
@@ -80,7 +74,6 @@ int main(){
 /**************************************  MENU  ***********************************************/
 	vector<User> v;
 	while(!var_exit){
->>>>>>> b21cc8c6d7027c3ebdb2159d64b91d53841b9815
 
 		cout << "Welcome to RideSharing! Please choose a option." << endl;
 		cout << "1-Insert new user." << endl;
