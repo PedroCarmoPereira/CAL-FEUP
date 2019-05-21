@@ -26,6 +26,7 @@ class Vertex {
 	T info;                // contents
 	vector<Edge<T> > adj;  // outgoing edges
 	bool visited;          // auxiliary field
+	int id;
 	double dist = 0;
 	Vertex<T> *path = NULL;
 	int queueIndex = 0;
@@ -33,19 +34,19 @@ class Vertex {
 	void addEdge(Vertex<T> *dest, double w);
 
 public:
-	Vertex(T in);
+	Vertex(T in, int id);
 	bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 	T getInfo() const;
 	double getDist() const;
 	Vertex *getPath() const;
 	bool removeEdgeTo(Vertex<T> *d);
 	friend class Graph<T>;
-	friend class MutablePriorityQueue<Vertex<T>> ;
+	friend class MutablePriorityQueue< Vertex<T> > ;
 };
 
 
 template <class T>
-Vertex<T>::Vertex(T in): info(in), visited(false) {}
+Vertex<T>::Vertex(T in, int i): info(in), id(i), visited(false) {}
 
 /*
  * Auxiliary function to add an outgoing edge to a vertex (this),
@@ -96,13 +97,13 @@ Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
 
 template <class T>
 class Graph {
-	vector<Vertex<T> *> vertexSet;    // vertex set
+	vector<Vertex<T> *> vertexSet;    // vertexSet.at(posi\ao).info.x e .y
 	double ** W = nullptr; // dist
 	int **P = nullptr; // path
 
 public:
 	Vertex<T> *findVertex(const T &in) const;
-	bool addVertex(const T &in);
+	bool addVertex(const T &in, int id);
 	bool addEdge(const T &sourc, const T &dest, double w);
 	bool removeEdge(const T &sourc, const T &dest);
 	bool removeVertex(const T &in);
@@ -148,10 +149,10 @@ Vertex<T> * Graph<T>::findVertex(const T &in) const {
  *  Returns true if successful, and false if a vertex with that content already exists.
  */
 template <class T>
-bool Graph<T>::addVertex(const T &in) {
+bool Graph<T>::addVertex(const T &in, int id) {
 	if ( findVertex(in) != NULL)
 		return false;
-	vertexSet.push_back(new Vertex<T>(in));
+	vertexSet.push_back(new Vertex<T>(in, id));
 	return true;
 }
 
@@ -314,7 +315,7 @@ bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight) {
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
 	auto s = initSingleSource(origin);
-	MutablePriorityQueue<Vertex<T>> q;
+	MutablePriorityQueue<Vertex<T> > q;
 	q.insert(s);
 	while ( ! q.empty() ) {
 		auto v = q.extractMin();

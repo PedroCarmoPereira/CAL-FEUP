@@ -1,6 +1,7 @@
 #include <iostream>
 #include "utils.h"
 #include "graphviewer.h"
+#include "Graph.h"
 
 using namespace std;
 
@@ -10,15 +11,15 @@ int main(){
 	cout << nodeFile << endl;
 	cout << edgeFile << endl;
 
-	GraphViewer *gv = new GraphViewer(600, 600, false);
-	gv->createWindow(600, 600);
-	gv->defineVertexColor("blue");
-	gv->defineEdgeColor("black");
+	// GraphViewer *gv = new GraphViewer(600, 600, false);
+	// gv->createWindow(600, 600);
+	// gv->defineVertexColor("blue");
+	//gv->defineEdgeColor("black");
 	//gv->closeWindow();
 
-	readFiles(gv, nodeFile, edgeFile);
+	Graph <Coords> rideSharing = readFiles(nodeFile, edgeFile);
 	getchar();
-	gv->closeWindow();
+	//gv->closeWindow();
 
 
 	return 0;

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include "Graph.h"
 #include "graphviewer.h"
 
 using namespace std;
@@ -21,6 +22,6 @@ typedef struct simple_time_t{
 
 void setFiles(location loc, string &nodeFile, string &edgeFile);
 
-void readFiles(GraphViewer *gv, string nodeFile, string edgeFile);
+Graph <Coords> readFiles(string nodeFile, string edgeFile);
 
 #endif

@@ -1,7 +1,10 @@
 #include "utils.h"
+#include "Graph.h"
 #include <sstream>
 #include <cmath>
 #include <fstream>
+
+
 
 using namespace std;
 
@@ -66,14 +69,16 @@ void setFiles(location loc, string &nodeFile, string &edgeFile){
 /**
  * 
 **/
-void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
+Graph <Coords> readFiles(string nodeFile, string edgeFile){
+
+	Graph <Coords> graph;
+
 	string line;
 	
 	ifstream fnodes;
 	int nNodes;
 	int nodeID;
-	int nodeX;
-	int nodeY;
+	Coords nodeCoords;
 
 	//open node file
 	fnodes.open(nodeFile);
@@ -91,12 +96,13 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 
 		nodeID = floor(atof(strtok((char*)line.c_str(), "(,")));
 
-		nodeX = floor(atof(strtok(NULL, "(,)"))) - 565000;
+		nodeCoords.x = floor(atof(strtok(NULL, "(,)")));
 
-		nodeY = floor(atof(strtok(NULL, "(,)"))) - 4570000;
+		nodeCoords.y = floor(atof(strtok(NULL, "(,)")));
 
-		gv->addNode(nodeID, nodeX, nodeY);
-		
+		graph.addVertex(nodeCoords);
+
+		graph.v
 	}
 
 
@@ -125,11 +131,11 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 
 		node2 = floor(atof(strtok(NULL, "(,)")));
 
-		gv->addEdge(index, node1, node2, EdgeType::UNDIRECTED);
+		
 		index++;
 	}
 
 	fedges.close();
-	gv->rearrange();
 
+	return graph;
 }
