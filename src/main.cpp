@@ -10,7 +10,7 @@ int main(){
 	cout << nodeFile << endl;
 	cout << edgeFile << endl;
 
-	GraphViewer *gv = new GraphViewer(10000000, 10000000, false);
+	GraphViewer *gv = new GraphViewer(600, 600, false);
 	gv->createWindow(600, 600);
 	gv->defineVertexColor("blue");
 	gv->defineEdgeColor("black");
