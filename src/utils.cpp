@@ -90,7 +90,7 @@ Graph <Coords> readFiles(string nodeFile, string edgeFile){
 	//read node file
 	getline(fnodes, line);
 	nNodes = atoi(strtok((char*)line.c_str(), "\n"));
-	cout << nNodes << endl;
+	//cout << nNodes << endl;
 
 	while (getline (fnodes,line)){
 
@@ -123,7 +123,7 @@ Graph <Coords> readFiles(string nodeFile, string edgeFile){
 	//read edge file
 	getline(fedges, line);
 	nEdges = atoi(strtok((char*)line.c_str(), "\n"));
-	cout << "nEdges: " << nEdges << endl;
+	//cout << "nEdges: " << nEdges << endl;
 
 	while (getline (fedges,line)){
 

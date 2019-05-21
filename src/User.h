@@ -5,14 +5,15 @@
 
 class User{
 private:
-    int id;
+    unsigned id, depTol, arrTol;
     Coords source, destination;
-    simplexTime departure, arrival;
-    unsigned int depTol, arrTol;
+    bool driver;
 public:
-    User(int id, Coords s, Coords d, simplexTime dep, simplexTime arr, int dT, int aT);
-    bool withinDepTol(simplexTime d) const;
-    bool withinArrTol(simplexTime d) const;
+    User(int id, Coords s, Coords d, int dT, int aT);
+    unsigned getId() const;
+    bool isDriver() const;
+    /*bool withinDepTol(simplexTime d) const;
+    bool withinArrTol(simplexTime d) const;*/
 };
 
 #endif

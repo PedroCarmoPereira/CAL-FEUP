@@ -14,12 +14,6 @@ typedef struct coords_t{
     int x_or_lat, y_or_lon;
 } Coords;
 
-typedef struct simple_time_t{
-    bool pastMidnight;
-    unsigned int hour;
-    unsigned int min;
-} simplexTime;
-
 void setFiles(location loc, string &nodeFile, string &edgeFile);
 
 Graph <Coords> readFiles(string nodeFile, string edgeFile);
