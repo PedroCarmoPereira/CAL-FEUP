@@ -10,13 +10,16 @@ int main(){
 	cout << nodeFile << endl;
 	cout << edgeFile << endl;
 
-	GraphViewer *gv = new GraphViewer(900, 1400, true);
-	gv->createWindow(900, 1400);
+	GraphViewer *gv = new GraphViewer(600, 600, false);
+	gv->createWindow(600, 600);
 	gv->defineVertexColor("blue");
 	gv->defineEdgeColor("black");
 	//gv->closeWindow();
 
 	readFiles(gv, nodeFile, edgeFile);
+	getchar();
+	gv->closeWindow();
+
 
 	return 0;
 }

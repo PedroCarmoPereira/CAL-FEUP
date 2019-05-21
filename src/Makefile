@@ -10,4 +10,4 @@ graphviewer.o:	utils.h	graphviewer.h	connection.h	edgetype.h
 utils.o:	utils.h	graphviewer.h	connection.h	edgetype.h
 
 clean:
-	rm *.o
+	rm *.o rideSharing
