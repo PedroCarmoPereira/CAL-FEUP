@@ -10,6 +10,11 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
+#elif __APPLE__
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netdb.h>
 #else
 #include <winsock2.h>
 #endif
@@ -27,6 +32,8 @@ class Connection {
   string readLine();
  private: 
 #ifdef linux
+  int sock;
+#elif __APPLE__
   int sock;
 #else
   SOCKET sock;

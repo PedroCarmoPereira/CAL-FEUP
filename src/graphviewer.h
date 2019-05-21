@@ -3,6 +3,8 @@
 
 #ifdef linux
 #include <unistd.h>
+#elif __APPLE__
+#include <unistd.h>
 #else
 #include <winsock2.h>
 #include <Windows.h>
@@ -369,6 +371,8 @@ public:
 	bool rearrange();
 
 #ifdef linux
+	static pid_t procId;
+#elif __APPLE__
 	static pid_t procId;
 #endif
 

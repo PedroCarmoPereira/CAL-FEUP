@@ -26,6 +26,26 @@ Connection::Connection(short port) {
   /* Establish the connection to the echo server */
   if (connect(sock, (struct sockaddr *) &echoServAddr, sizeof(echoServAddr)) < 0)
     myerror("connect() failed");
+#elif __APPLE__
+  struct sockaddr_in echoServAddr; /* Echo server address */
+    struct  hostent  *ptrh;
+
+    /* Create a reliable, stream socket using TCP */
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+      myerror("socket() failed");
+
+    /* Construct the server address structure */
+    memset(&echoServAddr, 0, sizeof(echoServAddr));     /* Zero out structure */
+    echoServAddr.sin_family      = AF_INET;             /* Internet address family */
+    echoServAddr.sin_port = htons(port);                /* Server port */
+
+    ptrh = gethostbyname("localhost");
+
+    memcpy(&echoServAddr.sin_addr, ptrh->h_addr, ptrh->h_length);
+
+    /* Establish the connection to the echo server */
+    if (connect(sock, (struct sockaddr *) &echoServAddr, sizeof(echoServAddr)) < 0)
+      myerror("connect() failed");
 #else
 		WSADATA wsaData;
     int iResult = WSAStartup(MAKEWORD(2,2), &wsaData);

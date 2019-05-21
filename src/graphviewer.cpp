@@ -4,6 +4,8 @@
 
 #ifdef linux
 pid_t GraphViewer::procId = NULL;
+#elif __APPLE__
+pid_t GraphViewer::procId = NULL;
 #endif
 short GraphViewer::port = 7772;
 
@@ -42,6 +44,21 @@ void GraphViewer::initialize(int width, int height, bool dynamic, int port_n) {
 		string str(buff);
 		con->sendMsg(str);
 	}
+#elif __APPLE__
+	if (!(procId = fork())) {
+			system(command.c_str());
+			kill(getppid(), SIGINT);
+			exit(0);
+		}
+		else {
+			usleep(2000000);
+			con = new Connection(port_n);
+
+			char buff[200];
+			sprintf(buff, "newGraph %d %d %s\n", width, height, (dynamic?"true":"false"));
+			string str(buff);
+			con->sendMsg(str);
+		}
 #else
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
