@@ -108,6 +108,10 @@ void menu(vector<User> & v){
 int main(){
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
+
+	Graph<Node> g = readFiles(nodeFile, edgeFile);
+	GraphViewer *gv;
+	graphViewer(gv, &g);
 	//cout << nodeFile << endl;
 	//cout << edgeFile << endl;
 
@@ -124,16 +128,7 @@ int main(){
 	/*vector<User> v;
 	menu(v);*/
 
-	time_t now = time(0);
-	tms *dep = gmtime(&now);
-	tms *arr = gmtime(&now);
 
-	arr->tm_hour++;
-
-	User u = User(0, Coords {0, 0}, Coords {1, 1}, *dep, *arr, 10, 10, 0);
-
-	arr->tm_min += 11;
-	cout << u.withinArrTol(*arr) << endl;
 
 
 /*********************************************************************************************/

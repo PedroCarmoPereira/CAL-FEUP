@@ -13,11 +13,6 @@
 
 using namespace std;
 
-typedef struct coords_t{
-    int x_or_lat;
-    int y_or_lon;
-} Coords;
-
 template <class T> class Edge;
 template <class T> class Graph;
 template <class T> class Vertex;
@@ -29,7 +24,6 @@ template <class T> class Vertex;
 template <class T>
 class Vertex {
 	T info;                	// contents
-	Coords coords;					// Coords of Vertex
 	vector<Edge<T> > adj;  	// outgoing edges
 	bool visited;          	// auxiliary field
 	double dist = 0;
@@ -39,10 +33,9 @@ class Vertex {
 	void addEdge(Vertex<T> *dest, double w);
 
 public:
-	Vertex(T in, Coords coords);
+	Vertex(T in);
 	bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 	T getInfo() const;
-	Coords getCoords() const;
 	vector<Edge<T> > getAdj() const;
 	double getDist() const;
 	Vertex *getPath() const;
@@ -53,7 +46,7 @@ public:
 
 
 template <class T>
-Vertex<T>::Vertex(T in, Coords coords): info(in), coords(coords), visited(false) {}
+Vertex<T>::Vertex(T in): info(in), visited(false) {}
 
 /*
  * Auxiliary function to add an outgoing edge to a vertex (this),
@@ -72,11 +65,6 @@ bool Vertex<T>::operator<(Vertex<T> & vertex) const {
 template <class T>
 T Vertex<T>::getInfo() const {
 	return this->info;
-}
-
-template <class T>
-Coords Vertex<T>::getCoords() const {
-	return this->coords;
 }
 
 template <class T>
@@ -131,7 +119,7 @@ class Graph {
 
 public:
 	Vertex<T> *findVertex(const T &in) const;
-	bool addVertex(const T &in, const Coords &coords);
+	bool addVertex(const T &in);
 	bool addEdge(const T &sourc, const T &dest, double w);
 	bool removeEdge(const T &sourc, const T &dest);
 	bool removeVertex(const T &in);
@@ -167,7 +155,7 @@ vector<Vertex<T> *> Graph<T>::getVertexSet() const {
 template <class T>
 Vertex<T> * Graph<T>::findVertex(const T &in) const {
 	for (auto v : vertexSet)
-		if ((const int)v->info == in)
+		if (v->info == in)
 			return v;
 	return NULL;
 }
@@ -177,10 +165,10 @@ Vertex<T> * Graph<T>::findVertex(const T &in) const {
  *  Returns true if successful, and false if a vertex with that content already exists.
  */
 template <class T>
-bool Graph<T>::addVertex(const T &in, const Coords &coords) {
+bool Graph<T>::addVertex(const T &in) {
 	if ( findVertex(in) != NULL)
 		return false;
-	vertexSet.push_back(new Vertex<T>(in, coords));
+	vertexSet.push_back(new Vertex<T>(in));
 	return true;
 }
 

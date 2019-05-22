@@ -9,6 +9,36 @@ using namespace std;
 /**
  * 
 **/
+Node::Node(){this->id = 0;}
+
+Node::Node(int id): id(id){}
+
+Node::Node(const Node& node){
+	this->id = node.id;
+	this->coords.x_or_lat = node.getCoords().x_or_lat;
+	this->coords.y_or_lon = node.getCoords().y_or_lon;
+}
+
+Node::Node(int id, Coords c){
+	this->id = id;
+	this->coords.x_or_lat = c.x_or_lat;
+	this->coords.y_or_lon = c.y_or_lon;
+}
+
+Node & Node::operator=(const Node & node){
+	this->id = node.id;
+	this->coords.x_or_lat = node.getCoords().x_or_lat;
+	this->coords.y_or_lon = node.getCoords().y_or_lon;
+}
+
+bool Node::operator==(const Node &n)const{
+	return this->id == n.id;
+}
+
+Coords Node::getCoords() const{
+	return this->coords;
+}
+
 void setFiles(location loc, string &nodeFile, string &edgeFile){
 	stringstream sn, se;
 	sn << "../maps/";
@@ -70,10 +100,10 @@ void setFiles(location loc, string &nodeFile, string &edgeFile){
  * @param n2
  * @return sqrt[ (n1.xA-n2.xB)^2 + (n1.yA-n2.yB)^2 ]
 **/
-int edgeWeight(Vertex <int> n1, Vertex <int> n2){
+int edgeWeight(Vertex <Node> n1, Vertex <Node> n2){
 
-	Coords aux1 = n1.getCoords();
-	Coords aux2 = n2.getCoords();
+	Coords aux1 = n1.getInfo().getCoords();
+	Coords aux2 = n2.getInfo().getCoords();
 
 	return sqrt(pow(aux1.x_or_lat-aux2.x_or_lat, 2) + pow(aux1.y_or_lon-aux2.y_or_lon, 2));
 }
@@ -84,9 +114,9 @@ int edgeWeight(Vertex <int> n1, Vertex <int> n2){
  * @param nodeFile
  * @return graph
 **/
-Graph <int> readFiles(string nodeFile, string edgeFile){
+Graph <Node> readFiles(string nodeFile, string edgeFile){
 
-	Graph <int> graph;
+	Graph <Node> graph;
 
 	string line;
 	
@@ -114,7 +144,7 @@ Graph <int> readFiles(string nodeFile, string edgeFile){
 
 		nodeCoords.y_or_lon = floor(atof(strtok(NULL, "(,)")));
 
-		graph.addVertex(nodeID, nodeCoords);
+		graph.addVertex(Node(nodeID, nodeCoords));
 	}
 
 	fnodes.close();
@@ -143,7 +173,7 @@ Graph <int> readFiles(string nodeFile, string edgeFile){
 
 		node2 = floor(atof(strtok(NULL, "(,)")));
 
-		graph.addEdge(node1, node2, edgeWeight(*graph.findVertex(node1), *graph.findVertex(node2)));
+		graph.addEdge(Node(node1), Node(node2), edgeWeight(*graph.findVertex(node1), *graph.findVertex(node2)));
 	}
 
 	fedges.close();
@@ -154,7 +184,7 @@ Graph <int> readFiles(string nodeFile, string edgeFile){
 /**
  * 
 **/
-void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
+void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 
 	//inicialize graph viewer
 	gv = new GraphViewer(600, 600, false);
@@ -163,28 +193,26 @@ void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
 	gv->defineEdgeColor("black");
 
 	//adding nodes
-	int auxId;
-	Coords auxCoords;
+	Node n;
 	for(auto v : rideSharing->getVertexSet()){
 
-		auxId = v->getInfo();
-		auxCoords = v->getCoords(); 
+		n = v->getInfo();
 
-		gv->addNode(auxId, auxCoords.x_or_lat, auxCoords.y_or_lon);
+		gv->addNode(n.id, n.getCoords().x_or_lat, n.getCoords().y_or_lon);
 	}
 
 	gv->rearrange();
 
 	//adding edges
 	int index = 0;
-	int v1;
+	Node v1;
 	for(auto v : rideSharing->getVertexSet()){
 
 		v1 = v->getInfo();
 
 		// adding all outgoing edges of v1
 		for(auto v2 : v->getAdj()){
-			gv->addEdge(index, v1, v2.getDest()->getInfo(), EdgeType::DIRECTED);
+			gv->addEdge(index, v1.id, v2.getDest()->getInfo().id, EdgeType::DIRECTED);
 			index++;
 		}
 	}
