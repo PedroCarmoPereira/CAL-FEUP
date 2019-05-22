@@ -43,6 +43,7 @@ public:
 	bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 	T getInfo() const;
 	Coords getCoords() const;
+	vector<Edge<T> > getAdj() const;
 	double getDist() const;
 	Vertex *getPath() const;
 	bool removeEdgeTo(Vertex<T> *d);
@@ -79,6 +80,11 @@ Coords Vertex<T>::getCoords() const {
 }
 
 template <class T>
+vector<Edge<T> > Vertex<T>::getAdj() const {
+	return this->adj;
+}
+
+template <class T>
 double Vertex<T>::getDist() const {
 	return this->dist;
 }
@@ -96,6 +102,8 @@ class Edge {
 	double weight;         // edge weight
 public:
 	Edge(Vertex<T> *d, double w);
+	Vertex<T> * getDest() const;
+	double getWeight() const;
 	friend class Graph<T>;
 	friend class Vertex<T>;
 };
@@ -103,6 +111,15 @@ public:
 template <class T>
 Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
 
+template <class T>
+Vertex<T> * Edge<T>::getDest() const{
+	return this->dest;
+}
+
+template <class T>
+double Edge<T>::getWeight() const{
+	return this->weight;
+}
 
 /*************************** Graph  **************************/
 
