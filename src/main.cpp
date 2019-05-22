@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "utils.h"
 #include "graphviewer.h"
 #include "User.h"
@@ -7,9 +8,13 @@
 
 using namespace std;
 
-bool var_exit = false;
 
 void insertUser(vector<User>& v){
+
+	time_t now = time(0);
+	tms *dep, *arr;
+	dep = gmtime(&now);
+	arr = gmtime(&now);
 	int id;
 	cout << "id:"; 
 	cin >> id;
@@ -26,6 +31,21 @@ void insertUser(vector<User>& v){
 	cout << "destination y_or_lon:";
 	cin >> d.y_or_lon;
 
+	cout << "departure hour:";
+	cin >> dep->tm_hour;
+	cout << "departure minute:";
+	cin >> dep->tm_min;
+
+	cout << "arrival hour:";
+	cin >> arr->tm_hour;
+	cout << "arrival minute:";
+	cin >> arr->tm_min;
+
+	if(arr->tm_hour < dep->tm_hour){
+		arr->tm_mday++;
+		arr->tm_wday++;
+		arr->tm_yday++;
+	}
 
 	int dT;
 	cout << "destiantination tolerance:"; 
@@ -35,8 +55,12 @@ void insertUser(vector<User>& v){
 	cout << "arrival tolerance:"; 
 	cin >> aT;
 	
+	int driving;
+	cout << "Driver(1)Passanger(0):";
+	cin >> driving;
 
-	User u = User( id, s, d, dT, aT);
+
+	User u = User( id, s, d, *dep, *arr, dT, aT, driving);
 	v.push_back(u);
 
 }
@@ -48,23 +72,9 @@ void displayUsers(vector<User> v){
 
 }
 
-int main(){
-	string nodeFile, edgeFile;
-	setFiles(PORTO, nodeFile, edgeFile);
-	//cout << nodeFile << endl;
-	//cout << edgeFile << endl;
-
-	/*GraphViewer *gv = new GraphViewer(600, 600, false);
-	gv->createWindow(600, 600);
-	gv->defineVertexColor("blue");
-	gv->defineEdgeColor("black");
-	//gv->closeWindow();
-
-	readFiles(gv, nodeFile, edgeFile);*/
-
-/**************************************  MENU  ***********************************************/
-	vector<User> v;
-	while(!var_exit){
+void menu(vector<User> & v){
+	bool var_exit = false;
+		while(!var_exit){
 
 		cout << "Welcome to RideSharing! Please choose a option." << endl;
 		cout << "1-Insert new user." << endl;
@@ -93,6 +103,38 @@ int main(){
 			break;
 		}
 	}
+}
+
+int main(){
+	string nodeFile, edgeFile;
+	setFiles(PORTO, nodeFile, edgeFile);
+	//cout << nodeFile << endl;
+	//cout << edgeFile << endl;
+
+	/*GraphViewer *gv = new GraphViewer(600, 600, false);
+	gv->createWindow(600, 600);
+	gv->defineVertexColor("blue");
+	gv->defineEdgeColor("black");
+	//gv->closeWindow();
+
+	readFiles(gv, nodeFile, edgeFile);*/
+
+/**************************************  MENU  ***********************************************/
+
+	/*vector<User> v;
+	menu(v);*/
+
+	time_t now = time(0);
+	tms *dep = gmtime(&now);
+	tms *arr = gmtime(&now);
+
+	arr->tm_hour++;
+
+	User u = User(0, Coords {0, 0}, Coords {1, 1}, *dep, *arr, 10, 10, 0);
+
+	arr->tm_min += 11;
+	cout << u.withinArrTol(*arr) << endl;
+
 
 /*********************************************************************************************/
 	//getchar();
