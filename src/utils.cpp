@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "Graph.h"
 #include <sstream>
 #include <cmath>
 #include <fstream>
@@ -64,54 +65,71 @@ void setFiles(location loc, string &nodeFile, string &edgeFile){
 }
 
 /**
- * 
+ * Calculates the Euclidean distance beteewn two vertexes.
+ * @param n1
+ * @param n2
+ * @return sqrt[ (n1.xA-n2.xB)^2 + (n1.yA-n2.yB)^2 ]
 **/
-void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
+int edgeWeight(Vertex <int> n1, Vertex <int> n2){
+
+	Coords aux1 = n1.getCoords();
+	Coords aux2 = n2.getCoords();
+
+	return sqrt(pow(aux1.x_or_lat-aux2.x_or_lat, 2) + pow(aux1.y_or_lon-aux2.y_or_lon, 2));
+}
+
+/**
+ * Reads data from files and populates the graph
+ * @param edgeFile
+ * @param nodeFile
+ * @return graph
+**/
+Graph <int> readFiles(string nodeFile, string edgeFile){
+
+	Graph <int> graph;
+
 	string line;
 	
 	ifstream fnodes;
 	int nNodes;
 	int nodeID;
-	int nodeX;
-	int nodeY;
+	Coords nodeCoords;
 
 	//open node file
 	fnodes.open(nodeFile);
 	if(!fnodes.is_open()){
 		cerr << "fnodes failed!" << endl;
-		return;
+		return graph;
 	}
 	
 	//read node file
 	getline(fnodes, line);
 	nNodes = atoi(strtok((char*)line.c_str(), "\n"));
-	//cout << nNodes << endl;
 
 	while (getline (fnodes,line)){
 
 		nodeID = floor(atof(strtok((char*)line.c_str(), "(,")));
 
-		nodeX = floor(atof(strtok(NULL, "(,)"))) - 565000;
+		nodeCoords.x_or_lat = floor(atof(strtok(NULL, "(,)")));
 
-		nodeY = floor(atof(strtok(NULL, "(,)"))) - 4570000;
+		nodeCoords.y_or_lon = floor(atof(strtok(NULL, "(,)")));
 
-		gv->addNode(nodeID, nodeX, nodeY);
-		
+		graph.addVertex(nodeID, nodeCoords);
 	}
 
-
 	fnodes.close();
+
+	//------------------------
 
 	ifstream fedges;
 	int nEdges;
 	int node1, node2;
-	int index = 0;
 
 	//open edgs file
 	fedges.open(edgeFile);
 	if(!fedges.is_open()){
 		cerr << "fnodes failed!" << endl;
-		return;
+		return graph;
 	}
 
 	//read edge file
@@ -125,11 +143,53 @@ void readFiles(GraphViewer *gv, string nodeFile, string edgeFile){
 
 		node2 = floor(atof(strtok(NULL, "(,)")));
 
-		gv->addEdge(index, node1, node2, EdgeType::UNDIRECTED);
-		index++;
+		graph.addEdge(node1, node2, edgeWeight(*graph.findVertex(node1), *graph.findVertex(node2)));
 	}
 
 	fedges.close();
+
+	return graph;
+}
+
+/**
+ * 
+**/
+void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
+
+	//inicialize graph viewer
+	gv = new GraphViewer(600, 600, false);
+	gv->createWindow(600, 600);
+	gv->defineVertexColor("blue");
+	gv->defineEdgeColor("black");
+
+	//adding nodes
+	int auxId;
+	Coords auxCoords;
+	for(auto v : rideSharing->getVertexSet()){
+
+		auxId = v->getInfo();
+		auxCoords = v->getCoords(); 
+
+		gv->addNode(auxId, auxCoords.x_or_lat, auxCoords.y_or_lon);
+	}
+
 	gv->rearrange();
 
+	//adding edges
+	int index = 0;
+	int v1;
+	for(auto v : rideSharing->getVertexSet()){
+
+		v1 = v->getInfo();
+
+		// adding all outgoing edges of v1
+		for(auto v2 : v->getAdj()){
+			gv->addEdge(index, v1, v2.getDest()->getInfo(), EdgeType::DIRECTED);
+			index++;
+		}
+	}
+
+	gv->rearrange();
+
+	//gv->closeWindow();
 }

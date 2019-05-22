@@ -3,18 +3,19 @@
 
 #include <string>
 #include <iostream>
+#include "Graph.h"
 #include "graphviewer.h"
 
 using namespace std;
 
 typedef enum {AVEIRO, BRAGA, COIMBRA, ERMESINDE, FAFE, GONDOMAR, LISBOA, MAIA, PORTO, VISEU, PORTUGAL} location;
 
-typedef struct coords_t{
-    int x_or_lat, y_or_lon;
-} Coords;
-
 void setFiles(location loc, string &nodeFile, string &edgeFile);
 
-void readFiles(GraphViewer *gv, string nodeFile, string edgeFile);
+int edgeWeight(Vertex <int> n1, Vertex <int> n2);
+
+Graph <int> readFiles(string nodeFile, string edgeFile);
+
+void graphViewer(GraphViewer *gv, Graph <int> * rideSharing);
 
 #endif
