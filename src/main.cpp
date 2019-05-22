@@ -50,26 +50,14 @@ void displayUsers(vector<User> v){
 
 int main(){
 	string nodeFile, edgeFile;
-	setFiles(PORTO, nodeFile, edgeFile);
+	setFiles(FAFE, nodeFile, edgeFile);
 	//cout << nodeFile << endl;
 	//cout << edgeFile << endl;
 
-	// GraphViewer *gv = new GraphViewer(600, 600, false);
-	// gv->createWindow(600, 600);
-	// gv->defineVertexColor("blue");
-	//gv->defineEdgeColor("black");
-	//gv->closeWindow();
+	Graph <int> rideSharing = readFiles(nodeFile, edgeFile);
 
-	Graph <Coords> rideSharing = readFiles(nodeFile, edgeFile);
-	getchar();
-	//gv->closeWindow();
-	/*GraphViewer *gv = new GraphViewer(600, 600, false);
-	gv->createWindow(600, 600);
-	gv->defineVertexColor("blue");
-	gv->defineEdgeColor("black");
-	//gv->closeWindow();
-
-	readFiles(gv, nodeFile, edgeFile);*/
+	GraphViewer *gv;
+	graphViewer(gv, &rideSharing);
 
 /**************************************  MENU  ***********************************************/
 	vector<User> v;
