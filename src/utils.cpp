@@ -185,9 +185,8 @@ void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
 		// adding all outgoing edges of v1
 		for(auto v2 : v->getAdj()){
 			gv->addEdge(index, v1, v2.getDest()->getInfo(), EdgeType::DIRECTED);
+			index++;
 		}
-
-		index++;
 	}
 
 	gv->rearrange();
