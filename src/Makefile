@@ -1,5 +1,6 @@
 CFLAGS	=	-D_HPUX_SOURCE	-D_REENTRANT	-Wall	-Wextra	-Werror
-OBJECTS	=	main.cpp	connection.cpp	graphviewer.cpp	utils.cpp	User.cpp
+#OBJECTS	=	main.cpp	connection.cpp	graphviewer.cpp	utils.cpp	User.cpp
+OBJECTS	=	main.o	connection.o	graphviewer.o	utils.o	User.o
 
 rideSharing: $(OBJECTS)
 	g++	-std=c++11 $(OBJECTS)	-pthread -o rideSharing
