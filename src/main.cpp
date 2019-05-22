@@ -48,18 +48,7 @@ void displayUsers(vector<User> v){
 
 }
 
-int main(){
-	string nodeFile, edgeFile;
-	setFiles(FAFE, nodeFile, edgeFile);
-	//cout << nodeFile << endl;
-	//cout << edgeFile << endl;
-
-	Graph <int> rideSharing = readFiles(nodeFile, edgeFile);
-
-	GraphViewer *gv;
-	graphViewer(gv, &rideSharing);
-
-/**************************************  MENU  ***********************************************/
+void menu(){
 	vector<User> v;
 	while(!var_exit){
 
@@ -90,9 +79,21 @@ int main(){
 			break;
 		}
 	}
+}
 
-/*********************************************************************************************/
-	
+int main(){
+	string nodeFile, edgeFile;
+	setFiles(FAFE, nodeFile, edgeFile);
+	//cout << nodeFile << endl;
+	//cout << edgeFile << endl;
+
+	Graph <int> rideSharing = readFiles(nodeFile, edgeFile);
+
+	GraphViewer *gv;
+	graphViewer(gv, &rideSharing);
+
+	menu();
+		
 	gv->closeWindow();
 
 	return 0;

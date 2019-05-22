@@ -193,7 +193,3 @@ void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
 
 	//gv->closeWindow();
 }
-
-/**
- * 
-**/
