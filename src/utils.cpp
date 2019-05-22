@@ -151,7 +151,6 @@ Graph <int> readFiles(string nodeFile, string edgeFile){
 	return graph;
 }
 
-
 /**
  * 
 **/
@@ -192,3 +191,7 @@ void graphViewer(GraphViewer *gv, Graph <int> * rideSharing){
 
 	//gv->closeWindow();
 }
+
+/**
+ * 
+**/
