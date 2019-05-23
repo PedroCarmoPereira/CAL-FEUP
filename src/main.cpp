@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "graphviewer.h"
 #include "User.h"
-
+#include "Driver.h"
 
 using namespace std;
 
@@ -19,17 +19,13 @@ void insertUser(vector<User>& v){
 	cout << "id:"; 
 	cin >> id;
 
-	coords_t s;
-	cout << "source x_or_lat:";
-	cin >> s.x_or_lat;
-	cout << "source y_or_lon:";
-	cin >> s.y_or_lon;
+	int s;
+	cout << "source id:";
+	cin >> s;
 
-	coords_t d;
-	cout << "destination x_or_lat:";
-	cin >> d.x_or_lat;
-	cout << "destination y_or_lon:";
-	cin >> d.y_or_lon;
+	int d;
+	cout << "destination id:";
+	cin >> d;
 
 	cout << "departure hour:";
 	cin >> dep->tm_hour;
@@ -58,7 +54,6 @@ void insertUser(vector<User>& v){
 	int driving;
 	cout << "Driver(1)Passanger(0):";
 	cin >> driving;
-
 
 	User u = User( id, s, d, *dep, *arr, dT, aT, driving);
 	v.push_back(u);
@@ -116,10 +111,10 @@ int main(){
 	menu(v);
 
 	//users graph
-	Graph<Node> users = userGraph(&v, &g);
+	//Graph<Node> users = userGraph(v, g);
 
-	GraphViewer *gv;
-	graphViewer(gv, &g);
+	//GraphViewer *gv;
+	//graphViewer(gv, &g);
 
 	//getchar();
 	//gv->closeWindow();

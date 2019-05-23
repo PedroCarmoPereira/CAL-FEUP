@@ -1,8 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <vector>
 #include <string>
 #include <iostream>
+#include "User.h"
 #include "Graph.h"
 #include "graphviewer.h"
 
@@ -34,6 +36,8 @@ int edgeWeight(Vertex <int> n1, Vertex <int> n2);
 
 Graph <Node> readFiles(string nodeFile, string edgeFile);
 
-void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing);
+Graph <Node> userGraph( vector<User> &v, Graph <Node> &g);
+
+int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v);
 
 #endif

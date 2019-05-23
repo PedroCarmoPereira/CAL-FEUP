@@ -1,8 +1,10 @@
 #include "utils.h"
 #include "Graph.h"
+#include "User.h"
 #include <sstream>
 #include <cmath>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -224,20 +226,20 @@ void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 
 int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v){
 
+	int weight = 0;
 	vector<Vertex<Node> >::const_iterator it1, it2;
 	it1 = v.begin();
 	it2 = v.begin() + 1;
 	while(it2 != v.end()){
 		for(auto e : it1->getAdj()){
-			if(e->getDest() == it2){
-
+			if(e.getDest() == &*it2){
+				weight += e.getWeight();
 			}
 		}
-
 		it1++;
 		it2++;
 	}
-
+	return weight;
 }
 /**
  * Creates the user graph.
@@ -246,19 +248,34 @@ int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v){
  * @param
  * @return 
 **/
-Graph <Node> userGraph(Driver &driver, vector<User> &v, Graph <Node> &g){
+Graph <Node> userGraph(/*Driver &driver,*/ vector<User> &v, Graph <Node> &g){
 
 	Graph <Node> users;
 
+	//add vertexs
 	for(auto u : v){
-		Graph <Node> copySource = g;
-		Graph <Node> copyDestiny = g;
+		users.addVertex(Node(u.getSourceID()));
+		users.addVertex(Node(u.getDestinationID()));
+	}
 
-		copySource.dijkstraShortestPath(u->getSourceID());
-		copyDestiny.dijkstraShortestPath(u->getDestinationID())
+	//add edges
+	for(auto u : users.getVertexSet() ){
 
-		delete(copySource);
-		delete(copyDestiny);
+		Graph <Node> copy = g;
+
+		//create all paths
+	//	copy.dijkstraShortestPath(/*node de u*/);
+
+		//get weight of all paths
+	//	for(auto edge : u->getAdj() ){
+	//		for(auto u2 : users.getVertexSet()){
+	//			if()//nao existir essa aresta
+	//				users.addEdge(/*node de u*/, /*node de u2*/, weightPath(copy,copy.getPath(/*node de u*/,/*node de u2*/  ) ) );
+	//		}
+	//	}
+
+		delete(&copy);
+	
 	}
 
 	return users;

@@ -17,9 +17,9 @@ bool User::isDriver() const{
 
 unsigned User::getId()const{return this->id;}
 
-int User::getSourceID() const{ return this.sourceID;}
+int User::getSourceID() const{ return this->sourceID;}
 
-int User::getDestinationID() const{ return this.destinationID;}
+int User::getDestinationID() const{ return this->destinationID;}
 
 bool User::withinArrTol(tms eta){
 
