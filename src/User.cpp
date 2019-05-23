@@ -1,9 +1,9 @@
 #include "User.h"
 
-User::User(int id, Coords s, Coords d, tms dep, tms arr, int dT, int aT, bool driving){
+User::User(int id, int sourceID, int destinationID, tms dep, tms arr, int dT, int aT, bool driving){
     this->id = id;
-    this->source = s;
-    this->destination = d;
+    this->sourceID = sourceID;
+    this->destinationID = destinationID;
     this->arrival = arr;
     this->departure = dep;
     this->depTol = dT;
@@ -16,6 +16,10 @@ bool User::isDriver() const{
 }
 
 unsigned User::getId()const{return this->id;}
+
+int User::getSourceID() const{ return this.sourceID;}
+
+int User::getDestinationID() const{ return this.destinationID;}
 
 bool User::withinArrTol(tms eta){
 

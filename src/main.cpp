@@ -109,29 +109,18 @@ int main(){
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
 
+	//inicial graph -> city map
 	Graph<Node> g = readFiles(nodeFile, edgeFile);
+
+	vector<User> v;
+	menu(v);
+
+	//users graph
+	Graph<Node> users = userGraph(&v, &g);
+
 	GraphViewer *gv;
 	graphViewer(gv, &g);
-	//cout << nodeFile << endl;
-	//cout << edgeFile << endl;
 
-	/*GraphViewer *gv = new GraphViewer(600, 600, false);
-	gv->createWindow(600, 600);
-	gv->defineVertexColor("blue");
-	gv->defineEdgeColor("black");
-	//gv->closeWindow();
-
-	readFiles(gv, nodeFile, edgeFile);*/
-
-/**************************************  MENU  ***********************************************/
-
-	/*vector<User> v;
-	menu(v);*/
-
-
-
-
-/*********************************************************************************************/
 	//getchar();
 	//gv->closeWindow();
 

@@ -221,3 +221,45 @@ void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 
 	//gv->closeWindow();
 }
+
+int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v){
+
+	vector<Vertex<Node> >::const_iterator it1, it2;
+	it1 = v.begin();
+	it2 = v.begin() + 1;
+	while(it2 != v.end()){
+		for(auto e : it1->getAdj()){
+			if(e->getDest() == it2){
+
+			}
+		}
+
+		it1++;
+		it2++;
+	}
+
+}
+/**
+ * Creates the user graph.
+ * @param user vector (v).
+ * @param 
+ * @param
+ * @return 
+**/
+Graph <Node> userGraph(Driver &driver, vector<User> &v, Graph <Node> &g){
+
+	Graph <Node> users;
+
+	for(auto u : v){
+		Graph <Node> copySource = g;
+		Graph <Node> copyDestiny = g;
+
+		copySource.dijkstraShortestPath(u->getSourceID());
+		copyDestiny.dijkstraShortestPath(u->getDestinationID())
+
+		delete(copySource);
+		delete(copyDestiny);
+	}
+
+	return users;
+}
