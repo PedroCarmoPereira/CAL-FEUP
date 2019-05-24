@@ -15,6 +15,8 @@ typedef struct coords_t{
     int y_or_lon;
 } Coords;
 
+Coords coords(int x, int y);
+
 class Node{
     Coords coords;
     public:
@@ -32,12 +34,12 @@ typedef enum {AVEIRO, BRAGA, COIMBRA, ERMESINDE, FAFE, GONDOMAR, LISBOA, MAIA, P
 
 void setFiles(location loc, string &nodeFile, string &edgeFile);
 
-int edgeWeight(Vertex <int> n1, Vertex <int> n2);
+double edgeWeight(Vertex <Node> n1, Vertex <Node> n2);
 
 Graph <Node> readFiles(string nodeFile, string edgeFile);
 
 Graph <Node> userGraph( vector<User> &v, Graph <Node> &g);
 
-int weightPath(Graph <Node> &g, const vector<Node > &v);
+double weightPath(Graph <Node> &g, const vector<Node > &v);
 
 #endif

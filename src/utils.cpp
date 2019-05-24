@@ -11,6 +11,14 @@ using namespace std;
 /**
  * 
 **/
+
+Coords coords(int x, int y){
+	Coords c;
+	c.x_or_lat = x;
+	c.y_or_lon = y;
+	return c;
+}
+
 Node::Node(){this->id = 0;}
 
 Node::Node(int id): id(id){}
@@ -102,12 +110,16 @@ void setFiles(location loc, string &nodeFile, string &edgeFile){
  * @param n2
  * @return sqrt[ (n1.xA-n2.xB)^2 + (n1.yA-n2.yB)^2 ]
 **/
-int edgeWeight(Vertex <Node> n1, Vertex <Node> n2){
+double edgeWeight(Vertex <Node> n1, Vertex <Node> n2){
 
 	Coords aux1 = n1.getInfo().getCoords();
 	Coords aux2 = n2.getInfo().getCoords();
+	cout << "X1: " <<  aux1.x_or_lat << "\tY1:" << aux1.y_or_lon << endl;
+	cout << "X2: " <<  aux2.x_or_lat << "\tY2:" << aux2.y_or_lon << endl;
+	double r = sqrt(pow(aux1.x_or_lat-aux2.x_or_lat, 2) + pow(aux1.y_or_lon-aux2.y_or_lon, 2));
+	cout << "Result: " << r << endl;
 
-	return sqrt(pow(aux1.x_or_lat-aux2.x_or_lat, 2) + pow(aux1.y_or_lon-aux2.y_or_lon, 2));
+	return r;
 }
 
 /**
@@ -224,7 +236,7 @@ void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 	//gv->closeWindow();
 }
 
-int weightPath(Graph <Node> &g, const  vector<Node > &v){
+double weightPath(Graph <Node> &g, const  vector<Node > &v){
 
 	int weight = 0;
 	vector<Node >::const_iterator it1, it2;
