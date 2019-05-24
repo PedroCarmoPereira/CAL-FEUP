@@ -258,13 +258,13 @@ int main(){
 	Node n2 = Node(10);
 	g = CreateTestGraph();
 
-
 	time_t now = time(0);
 	tms dep = *localtime(&now);
 	tms arr = *localtime(&now);
 	arr.tm_hour++;
 
 	vector<User> u;
+	//menu(v);
 	User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
 	u.push_back(u1);
 	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
@@ -273,29 +273,11 @@ int main(){
 	RideShare r = RideShare(g, 10, 1, 11, dep, arr, 10, 5, 5, u);
 	Graph<Node> q = r.trimGraph();
 	cout << q.getNumVertex() << endl;
+	
 	//GraphViewer *gv;
 	//graphViewer(gv, &q);
-	
-	/*
-	vector<Node> v = g.getPath(n0, n5);
-	for(vector<Node>::const_iterator it = v.begin(); it != v.end(); it++) cout << it->id << endl;*/
 
-	/*Graph<int> g = CreateTestGraph();
-	g.dijkstraShortestPath(1);
-	vector<int> v = g.getPath(1, 7);
-	for(vector<int>::const_iterator it = v.begin(); it != v.end(); it++) cout << *it << endl;*/
-
-	//vector<User> v;
-	//menu(v);
-
-	//users graph
-	//Graph<Node> users = userGraph(v, g);
-
-	/*GraphViewer *gv;
-	graphViewer(gv, &q);*/
-
-	/*getchar();
-	gv->closeWindow();*/
+	//gv->closeWindow();
 
 	return 0;
 }
