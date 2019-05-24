@@ -256,8 +256,8 @@ int main(){
 	/*
 	vector<Node> v = g.getPath(n0, n5);
 	for(vector<Node>::const_iterator it = v.begin(); it != v.end(); it++) cout << it->id << endl;*/
-/*
-	Graph<int> g = CreateTestGraph();
+
+	/*Graph<int> g = CreateTestGraph();
 	g.dijkstraShortestPath(1);
 	vector<int> v = g.getPath(1, 7);
 	for(vector<int>::const_iterator it = v.begin(); it != v.end(); it++) cout << *it << endl;*/
@@ -268,8 +268,8 @@ int main(){
 	//users graph
 	//Graph<Node> users = userGraph(v, g);
 
-	//GraphViewer *gv;
-	//graphViewer(gv, &g);
+	/*GraphViewer *gv;
+	graphViewer(gv, &q);*/
 
 	/*getchar();
 	gv->closeWindow();*/
