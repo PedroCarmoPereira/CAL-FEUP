@@ -100,15 +100,54 @@ void menu(vector<User> & v){
 	}
 }
 
+Graph<Node> CreateTestGraph() {
+	//BASEADO NO DO BATOSTA		
+  Graph<Node> myGraph;
+
+  return myGraph;
+}
+
+
 int main(){
-	string nodeFile, edgeFile;
-	setFiles(PORTO, nodeFile, edgeFile);
+	//string nodeFile, edgeFile;
+	//setFiles(PORTO, nodeFile, edgeFile);
 
 	//inicial graph -> city map
-	Graph<Node> g = readFiles(nodeFile, edgeFile);
+	Graph<Node> g;// = readFiles(nodeFile, edgeFile);
+	Node n0 = Node(0);
+	Node n1 = Node(1);
+	Node n2 = Node(2);
+	Node n3 = Node(3);
+	Node n4 = Node(4);
+	Node n5 = Node(5);
+	g.addVertex(n0);
+	g.addVertex(n1);
+	g.addVertex(n2);
+	g.addVertex(n3);
+	g.addVertex(n4);
+	g.addVertex(n5);
 
-	vector<User> v;
-	menu(v);
+	g.addEdge(n0, n1, 5);
+	g.addEdge(n1, n5, 2);
+	g.addEdge(n0, n2, 3);
+	g.addEdge(n2, n3, 4);
+	g.addEdge(n3, n5, 1);
+	g.addEdge(n3, n4, 2);
+
+	g.dijkstraShortestPath(0);
+	const vector<Node> &v = g.getPath(n0, n5);
+	cout << weightPath(g, v) << endl;
+	/*
+	vector<Node> v = g.getPath(n0, n5);
+	for(vector<Node>::const_iterator it = v.begin(); it != v.end(); it++) cout << it->id << endl;*/
+/*
+	Graph<int> g = CreateTestGraph();
+	g.dijkstraShortestPath(1);
+	vector<int> v = g.getPath(1, 7);
+	for(vector<int>::const_iterator it = v.begin(); it != v.end(); it++) cout << *it << endl;*/
+
+	//vector<User> v;
+	//menu(v);
 
 	//users graph
 	//Graph<Node> users = userGraph(v, g);

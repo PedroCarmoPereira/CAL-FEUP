@@ -9,6 +9,7 @@
 #include <list>
 #include <limits>
 #include <cmath>
+#include <algorithm>
 #include "MutablePriorityQueue.h"
 
 using namespace std;
@@ -134,7 +135,7 @@ public:
 	void dijkstraShortestPath(const T &s);
 	int findVertexIdx(const T &in) const;
 	void floydWarshallShortestPath();
-	vector<T> getPath(const T &origin, const T &dest) const;
+	vector<T> getPath(const T &origin,const T &dest) const;
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	Vertex<T> findVertexWithId(int id) const;
 };

@@ -9,10 +9,10 @@ class Driver : public User {
     unsigned currOcup;
     tms eta;
     public:
-    Driver(int id, Coords s, Coords d, tms dep, tms arr, int dT, int aT, unsigned cap);
+    Driver(int id, int s, int d, tms dep, tms arr, int dT, int aT, unsigned cap);
     void setCurrOcup(int oc);
     unsigned getCapacity() const;
-    unsigned getcCurOcup() const;
+    unsigned getCurrOcup() const;
 };
 
 #endif

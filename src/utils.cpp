@@ -224,18 +224,16 @@ void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 	//gv->closeWindow();
 }
 
-int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v){
+int weightPath(Graph <Node> &g, const  vector<Node > &v){
 
 	int weight = 0;
-	vector<Vertex<Node> >::const_iterator it1, it2;
+	vector<Node >::const_iterator it1, it2;
 	it1 = v.begin();
 	it2 = v.begin() + 1;
 	while(it2 != v.end()){
-		for(auto e : it1->getAdj()){
-			if(e.getDest() == &*it2){
-				weight += e.getWeight();
-			}
-		}
+		vector<Edge <Node> > v =  g.findVertex(*it1)->getAdj();
+		for(vector<Edge <Node> >::const_iterator it3 = v.begin(); it3 != v.end(); it3++)
+			if (it3->getDest()->getInfo() == *it2) weight += it3->getWeight();
 		it1++;
 		it2++;
 	}

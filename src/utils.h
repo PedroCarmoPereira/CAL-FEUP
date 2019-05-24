@@ -38,6 +38,6 @@ Graph <Node> readFiles(string nodeFile, string edgeFile);
 
 Graph <Node> userGraph( vector<User> &v, Graph <Node> &g);
 
-int weightPath(Graph <Node> &g, vector<Vertex<Node> > &v);
+int weightPath(Graph <Node> &g, const vector<Node > &v);
 
 #endif
