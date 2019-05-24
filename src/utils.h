@@ -47,4 +47,6 @@ time_t weightTotime(double w);
 
 void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing);
 
+vector <User> readUsers(string File);
+
 #endif

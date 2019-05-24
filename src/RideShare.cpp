@@ -20,7 +20,6 @@ Graph<Node> RideShare::trimGraph(){
         nodesToKeep.push_back(this->graph.findVertex(it->getSourceID())->getInfo());
         nodesToKeep.push_back(this->graph.findVertex(it->getDestinationID())->getInfo());
     }
-
     Graph<Node> trimmedGraph;    
     for(vector<Node>::const_iterator it0 = nodesToKeep.begin(); it0 != nodesToKeep.end(); it0++)
         trimmedGraph.addVertex(this->graph.findVertex(*it0)->getInfo());
@@ -32,8 +31,10 @@ Graph<Node> RideShare::trimGraph(){
             Node n2 = Node(*it2);
             this->graph.dijkstraShortestPath(n1);
             const vector<Node> &v = this->graph.getPath(n1, n2);
-            trimmedGraph.addEdge(n1, n2, weightPath(this->graph, v));
+            if(!v.empty())trimmedGraph.addEdge(n1, n2, weightPath(this->graph, v));
         }
-
+    vector<Vertex<Node > * > vertexSet = this->graph.getVertexSet();
+    /*for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++)
+        if ((*itv)->getPath() == nullptr) trimmedGraph.removeVertex((*itv)->getInfo());*/
     return trimmedGraph;
 }

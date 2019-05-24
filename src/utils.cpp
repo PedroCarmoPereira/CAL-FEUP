@@ -1,10 +1,12 @@
 #include "utils.h"
 #include "Graph.h"
 #include "User.h"
+#include "Driver.h"
 #include <sstream>
 #include <cmath>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -187,6 +189,7 @@ Graph <Node> readFiles(string nodeFile, string edgeFile){
 		node2 = floor(atof(strtok(NULL, "(,)")));
 
 		graph.addEdge(Node(node1), Node(node2), edgeWeight(*graph.findVertex(node1), *graph.findVertex(node2)));
+		graph.addEdge(Node(node2), Node(node1), edgeWeight(*graph.findVertex(node1), *graph.findVertex(node2)));
 	}
 
 	fedges.close();
@@ -266,4 +269,55 @@ time_t weightTotime(double w){
 	time_t t;
 	t = w/MAX_SPEED;
 	return t;
+}
+
+vector <User> readUsers(string File){
+
+	vector <User> users;
+
+	string line;
+	
+	ifstream f;
+	int nUsers;
+	int id;
+	int sourceID, destinationID, dT, aT;
+	char *dep, *arr;
+	tms _dep;
+	tms _arr;
+
+	//open file
+	f.open(File);
+	if(!f.is_open()){
+		cerr << "f failed!" << endl;
+		return users;
+	}
+	
+	//read file
+	getline(f, line);
+	nUsers = atoi(strtok((char*)line.c_str(), "\n"));
+	int i = 0;
+	while (getline (f,line)){
+
+		id = atof(strtok((char*)line.c_str(), "(,"));
+		sourceID = atof(strtok(NULL, "(,)"));
+		destinationID = atof(strtok(NULL, "(,)"));
+		dep = strtok(NULL, "(,)");
+		arr = strtok(NULL, "(,)");
+		dT = atof(strtok(NULL, "(,)"));
+		aT = atof(strtok(NULL, "(,)"));
+
+		_dep.tm_hour = atoi(strtok(dep, "."));
+		_dep.tm_min = atoi(strtok(NULL, "."));
+		_arr.tm_hour = atoi(strtok(arr, "."));
+		_arr.tm_min = atoi(strtok(NULL, "."));
+
+		//cout <<" "<<  id <<" " << sourceID <<" " << destinationID <<" "<< _dep.tm_hour <<" " << _dep.tm_min  <<" "<< _arr.tm_hour  <<" "<< _arr.tm_min  <<" "<< dT  <<" "<<  aT << endl;
+		User u = User( id, sourceID, destinationID, _dep, _arr, dT, aT, false);
+		users.push_back(u);
+	
+	}
+	f.close();
+
+	return users;
+
 }

@@ -249,35 +249,36 @@ Graph<Node> CreateTestGraph() {
  * Inicializes the user graph.
  **/
 int main(){
-	//string nodeFile, edgeFile;
-	//setFiles(PORTO, nodeFile, edgeFile);
+	string nodeFile, edgeFile;
+	setFiles(PORTO, nodeFile, edgeFile);
 
 	//inicial graph -> city map
-	Graph<Node> g;// = readFiles(nodeFile, edgeFile);
-	Node n1 = Node(1);
-	Node n2 = Node(10);
-	g = CreateTestGraph();
+	Graph<Node> g = readFiles(nodeFile, edgeFile);
+	/*Node n1 = Node(1);
+	Node n2 = Node(10);*/
+	//g = CreateTestGraph();
 
 	time_t now = time(0);
 	tms dep = *localtime(&now);
 	tms arr = *localtime(&now);
 	arr.tm_hour++;
 
-	vector<User> u;
+	vector<User> u = readUsers("users_Porto.txt");
+
 	//menu(v);
-	User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
+	/*User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
 	u.push_back(u1);
 	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
-	u.push_back(u2);
+	u.push_back(u2);*/
 
-	RideShare r = RideShare(g, 10, 1, 11, dep, arr, 10, 5, 5, u);
+	RideShare r = RideShare(g, 0, 90379615, 506111755, dep, arr, 10, 5, 5, u);
 	Graph<Node> q = r.trimGraph();
-	cout << q.getNumVertex() << endl;
+	//cout << q.getNumVertex() << endl;
 	
-	//GraphViewer *gv;
-	//graphViewer(gv, &q);
+	GraphViewer *gv;
+	graphViewer(gv, &q);
 
-	//gv->closeWindow();
+	gv->closeWindow();
 
 	return 0;
 }
