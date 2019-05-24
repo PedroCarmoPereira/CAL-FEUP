@@ -38,7 +38,7 @@ Node & Node::operator=(const Node & node){
 	this->id = node.id;
 	this->coords.x_or_lat = node.getCoords().x_or_lat;
 	this->coords.y_or_lon = node.getCoords().y_or_lon;
-	//return node;
+	return *this;
 }
 
 bool Node::operator==(const Node &n)const{
@@ -255,4 +255,15 @@ double weightPath(Graph <Node> &g, const  vector<Node > &v){
 		it2++;
 	}
 	return weight;
+}
+
+/**
+ * Converts the weight (represented as distance) to time.
+ * @return t;
+**/
+time_t weightTotime(double w){
+	int x = round(w);
+	time_t t;
+	t = w/MAX_SPEED;
+	return t;
 }

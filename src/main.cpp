@@ -10,7 +10,9 @@
 
 using namespace std;
 
-
+/**
+ * Inserts the created user into the users vector. 
+**/
 void insertUser(vector<User>& v){
 
 	time_t now = time(0);
@@ -62,6 +64,10 @@ void insertUser(vector<User>& v){
 
 }
 
+/**
+ * Displays the Ids of the users created.
+ * @param v
+**/
 void displayUsers(vector<User> v){
     for (auto u: v){
 		cout << u.getId() << endl;
@@ -69,6 +75,10 @@ void displayUsers(vector<User> v){
 
 }
 
+/**
+ * Funtion that displays the menu and computes the user inputs.
+ * @param v
+**/
 void menu(vector<User> & v){
 	bool var_exit = false;
 		while(!var_exit){
@@ -102,6 +112,11 @@ void menu(vector<User> & v){
 	}
 }
 
+/**
+ * Auxiliar funtion. 
+ * Creats the graph that represents the city map.
+ * @return myGraph
+**/
 Graph<Node> CreateTestGraph() {
 	//BASEADO NO DO BATOSTA		
   Graph<Node> myGraph;
@@ -227,6 +242,12 @@ Graph<Node> CreateTestGraph() {
   return myGraph;
 }
 
+/**
+ * Main funtion.
+ * Inicializes the city map graph.
+ * Inicializes the users vector.
+ * Inicializes the user graph.
+ **/
 int main(){
 	//string nodeFile, edgeFile;
 	//setFiles(PORTO, nodeFile, edgeFile);
@@ -236,6 +257,7 @@ int main(){
 	Node n1 = Node(1);
 	Node n2 = Node(10);
 	g = CreateTestGraph();
+
 
 	time_t now = time(0);
 	tms dep = *localtime(&now);
@@ -247,7 +269,7 @@ int main(){
 	u.push_back(u1);
 	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
 	u.push_back(u2);
-	
+
 	RideShare r = RideShare(g, 10, 1, 11, dep, arr, 10, 5, 5, u);
 	Graph<Node> q = r.trimGraph();
 	cout << q.getNumVertex() << endl;

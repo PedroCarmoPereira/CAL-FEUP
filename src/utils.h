@@ -4,11 +4,14 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <ctime>
 #include "User.h"
 #include "Graph.h"
 #include "graphviewer.h"
 
 using namespace std;
+
+#define MAX_SPEED   13.89 /* m/s to be used to calculate time or roughly 50 km/h */
 
 typedef struct coords_t{
     int x_or_lat;
@@ -38,9 +41,9 @@ double edgeWeight(Vertex <Node> n1, Vertex <Node> n2);
 
 Graph <Node> readFiles(string nodeFile, string edgeFile);
 
-Graph <Node> userGraph( vector<User> &v, Graph <Node> &g);
-
 double weightPath(Graph <Node> &g, const vector<Node > &v);
+
+time_t weightTotime(double w);
 
 void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing);
 
