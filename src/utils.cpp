@@ -11,7 +11,6 @@ using namespace std;
 /**
  * 
 **/
-
 Coords coords(int x, int y){
 	Coords c;
 	c.x_or_lat = x;
@@ -39,6 +38,7 @@ Node & Node::operator=(const Node & node){
 	this->id = node.id;
 	this->coords.x_or_lat = node.getCoords().x_or_lat;
 	this->coords.y_or_lon = node.getCoords().y_or_lon;
+	//return node;
 }
 
 bool Node::operator==(const Node &n)const{
@@ -49,6 +49,9 @@ Coords Node::getCoords() const{
 	return this->coords;
 }
 
+/**
+ * 
+**/
 void setFiles(location loc, string &nodeFile, string &edgeFile){
 	stringstream sn, se;
 	sn << "../maps/";
@@ -192,7 +195,8 @@ Graph <Node> readFiles(string nodeFile, string edgeFile){
 }
 
 /**
- * 
+ * Converts the Graph <Node > provided into a GraphViewer.
+ * Displays the GraphViewer.
 **/
 void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 
@@ -232,6 +236,11 @@ void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing){
 	//gv->closeWindow();
 }
 
+/**
+ * Calculates the total sum of shortest path found.
+ * All the Node in the path found are in the vector<Node > provided in the arguments.
+ * @return weight
+**/
 double weightPath(Graph <Node> &g, const  vector<Node > &v){
 
 	int weight = 0;
@@ -246,43 +255,4 @@ double weightPath(Graph <Node> &g, const  vector<Node > &v){
 		it2++;
 	}
 	return weight;
-}
-/**
- * Creates the user graph.
- * @param user vector (v).
- * @param 
- * @param
- * @return 
-**/
-Graph <Node> userGraph(/*Driver &driver,*/ vector<User> &v, Graph <Node> &g){
-
-	Graph <Node> users;
-
-	//add vertexs
-	for(auto u : v){
-		users.addVertex(Node(u.getSourceID()));
-		users.addVertex(Node(u.getDestinationID()));
-	}
-
-	//add edges
-	for(auto u : users.getVertexSet() ){
-
-		Graph <Node> copy = g;
-
-		//create all paths
-	//	copy.dijkstraShortestPath(/*node de u*/);
-
-		//get weight of all paths
-	//	for(auto edge : u->getAdj() ){
-	//		for(auto u2 : users.getVertexSet()){
-	//			if()//nao existir essa aresta
-	//				users.addEdge(/*node de u*/, /*node de u2*/, weightPath(copy,copy.getPath(/*node de u*/,/*node de u2*/  ) ) );
-	//		}
-	//	}
-
-		delete(&copy);
-	
-	}
-
-	return users;
 }

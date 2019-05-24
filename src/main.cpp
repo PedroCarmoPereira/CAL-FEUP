@@ -227,7 +227,6 @@ Graph<Node> CreateTestGraph() {
   return myGraph;
 }
 
-
 int main(){
 	//string nodeFile, edgeFile;
 	//setFiles(PORTO, nodeFile, edgeFile);
@@ -242,11 +241,13 @@ int main(){
 	tms dep = *localtime(&now);
 	tms arr = *localtime(&now);
 	arr.tm_hour++;
+
 	vector<User> u;
 	User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
 	u.push_back(u1);
 	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
 	u.push_back(u2);
+	
 	RideShare r = RideShare(g, 10, 1, 11, dep, arr, 10, 5, 5, u);
 	Graph<Node> q = r.trimGraph();
 	cout << q.getNumVertex() << endl;

@@ -1,10 +1,17 @@
 #include "RideShare.h"
 
+/**
+ * RideShare constructor.
+**/
 RideShare::RideShare(Graph<Node> graph, int id, int s, int d, tms dep, tms arr, int dT, int aT, unsigned cap, vector<User> u):driver(Driver(id, s, d, dep, arr, dT, aT, cap)){
     this->graph = graph;
     this->users = u;
 }
 
+/**
+ * Creates a graph with all the relevante nodes (Driver, User location and User destination).
+ * @return trimmedGraph.
+**/
 Graph<Node> RideShare::trimGraph(){
     vector<Node> nodesToKeep;
     nodesToKeep.push_back(this->graph.findVertex(this->driver.getSourceID())->getInfo());
