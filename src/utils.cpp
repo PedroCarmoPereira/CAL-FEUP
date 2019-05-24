@@ -114,11 +114,7 @@ double edgeWeight(Vertex <Node> n1, Vertex <Node> n2){
 
 	Coords aux1 = n1.getInfo().getCoords();
 	Coords aux2 = n2.getInfo().getCoords();
-	cout << "X1: " <<  aux1.x_or_lat << "\tY1:" << aux1.y_or_lon << endl;
-	cout << "X2: " <<  aux2.x_or_lat << "\tY2:" << aux2.y_or_lon << endl;
 	double r = sqrt(pow(aux1.x_or_lat-aux2.x_or_lat, 2) + pow(aux1.y_or_lon-aux2.y_or_lon, 2));
-	cout << "Result: " << r << endl;
-
 	return r;
 }
 

@@ -6,6 +6,7 @@
 #include "graphviewer.h"
 #include "User.h"
 #include "Driver.h"
+#include "RideShare.h"
 
 using namespace std;
 
@@ -237,10 +238,21 @@ int main(){
 	Node n2 = Node(10);
 	g = CreateTestGraph();
 
-	g.dijkstraShortestPath(1);
-	const vector<Node> &v = g.getPath(n1, n2);
-	for(vector<Node>::const_iterator it = v.begin(); it != v.end(); it++) cout << it->id << endl;
-	cout << weightPath(g, v) << endl;
+	time_t now = time(0);
+	tms dep = *localtime(&now);
+	tms arr = *localtime(&now);
+	arr.tm_hour++;
+	vector<User> u;
+	User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
+	u.push_back(u1);
+	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
+	u.push_back(u2);
+	RideShare r = RideShare(g, 10, 1, 11, dep, arr, 10, 5, 5, u);
+	Graph<Node> q = r.trimGraph();
+	cout << q.getNumVertex() << endl;
+	//GraphViewer *gv;
+	//graphViewer(gv, &q);
+	
 	/*
 	vector<Node> v = g.getPath(n0, n5);
 	for(vector<Node>::const_iterator it = v.begin(); it != v.end(); it++) cout << it->id << endl;*/
@@ -259,8 +271,8 @@ int main(){
 	//GraphViewer *gv;
 	//graphViewer(gv, &g);
 
-	//getchar();
-	//gv->closeWindow();
+	/*getchar();
+	gv->closeWindow();*/
 
 	return 0;
 }

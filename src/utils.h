@@ -42,4 +42,6 @@ Graph <Node> userGraph( vector<User> &v, Graph <Node> &g);
 
 double weightPath(Graph <Node> &g, const vector<Node > &v);
 
+void graphViewer(GraphViewer *gv, Graph <Node> * rideSharing);
+
 #endif

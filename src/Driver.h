@@ -5,7 +5,7 @@
 #include "utils.h"
 
 class Driver : public User {
-    const unsigned capacity;
+    unsigned capacity;
     unsigned currOcup;
     tms eta;
     public:
