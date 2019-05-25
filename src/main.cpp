@@ -9,7 +9,31 @@
 #include "RideShare.h"
 
 using namespace std;
+/**
+ * Joins the two graphs.
+ * add a edge bettween the graphs
+**/
+Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
 
+    vector<Vertex<Node> *>  vertexSet = graph_dest.getVertexSet();
+	Node node1 = (*vertexSet.begin())->getInfo();
+
+    for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++){
+        graph_source.addVertex((*itv)->getInfo());
+	}
+	for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++){
+		vector<Edge<Node>> adjSet = (*itv)->getAdj();
+		for(vector<Edge<Node>>::const_iterator it = adjSet.begin(); it != adjSet.end(); it++)
+			graph_source.addEdge((*itv)->getInfo(), (*it).getDest()->getInfo(),(*it).getWeight() );
+	}
+
+	vertexSet = graph_source.getVertexSet();
+	Node node2 = (*vertexSet.begin())->getInfo();
+	graph_source.addEdge(node1, node2, 1 );
+	graph_source.addEdge(node2, node1, 1 );
+
+    return graph_source;
+}
 /**
  * Inserts the created user into the users vector. 
 **/
@@ -249,35 +273,35 @@ Graph<Node> CreateTestGraph() {
  * Inicializes the user graph.
  **/
 int main(){
+
+	//get Porto and Fafe graphs
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
+	Graph<Node> g_porto = readFiles(nodeFile, edgeFile);
+	setFiles(FAFE, nodeFile, edgeFile);
+	Graph<Node> g_fafe = readFiles(nodeFile, edgeFile);
 
-	//inicial graph -> city map
-	Graph<Node> g = readFiles(nodeFile, edgeFile);
-	/*Node n1 = Node(1);
-	Node n2 = Node(10);*/
-	//g = CreateTestGraph();
-
+	//get Driver info
 	time_t now = time(0);
 	tms dep = *localtime(&now);
 	tms arr = *localtime(&now);
 	arr.tm_hour++;
 
-	vector<User> u = readUsers("users_Porto.txt");
+	//get users saved in users.txt
+	vector<User> u = readUsers("users.txt");
 
-	//menu(v);
-	/*User u1 = User(10, 2, 13, dep, arr, 10, 5, false);
-	u.push_back(u1);
-	User u2 = User(10, 5, 14, dep, arr, 10, 5, false);
-	u.push_back(u2);*/
-
-	RideShare r = RideShare(g, 0, 90379615, 506111755, dep, arr, 10, 5, 5, u);
+	//process Porto and fafe graphs to a new graph with all of reachable vertexs of users and driver
+	Graph<Node> g_porto_fafe = joinGraph(g_porto, g_fafe);
+	RideShare r = RideShare(g_porto_fafe, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
 	Graph<Node> q = r.trimGraph();
-	//cout << q.getNumVertex() << endl;
+
+	//criar o path 
 	
+	
+
+
 	GraphViewer *gv;
 	graphViewer(gv, &q);
-
 	//gv->closeWindow();
 
 	return 0;

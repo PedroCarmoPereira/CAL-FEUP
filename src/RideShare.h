@@ -15,6 +15,7 @@ public:
 
     RideShare(Graph<Node> graph, int id, int s, int d, tms dep, tms arr, int dT, int aT, unsigned cap, vector<User> users);
     Graph<Node> trimGraph();
+
 };
 
 #endif
