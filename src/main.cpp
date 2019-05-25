@@ -9,6 +9,46 @@
 #include "RideShare.h"
 
 using namespace std;
+
+/**
+ * get the shortest path (only get one user) 0 ? ?' 0'
+ * get the shortest path with the first user vertexs (only get one user) 0 ? ? ?' ?' 0'
+ * get the shortest path with the first and second users vertexs (only get one user) ...
+ * (sem contar com o tempo por enquanto)
+**/
+Graph<Node> createPath(Graph<Node> g, vector<User> users, Driver d ){
+
+	Node d_node1 = g.findVertex(d.getSourceID())->getInfo();
+	Node d_node2 = g.findVertex(d.getDestinationID())->getInfo();
+	//get the shortest path (only get one user)
+	vector<Node> v;
+	int weight = 0;
+	for(auto u : users){
+		Graph<Node> copy = g; //graph with the vertexs that matters
+		for(auto u2 : users){
+			if(u.getId() != u2.getId()){
+				Node u2_node1 = copy.findVertex(u2.getSourceID())->getInfo();
+				Node u2_node2 = copy.findVertex(u2.getDestinationID())->getInfo();
+			/*	copy.removeVertex(u2_node1);
+				copy.removeVertex(u2_node2);*/
+				cout << "removi" << endl;
+			}
+		}
+		/*GraphViewer *gv;
+		graphViewer(gv, &copy);*/
+
+		Node u_node1 = g.findVertex(u.getSourceID())->getInfo();
+		Node u_node2 = g.findVertex(u.getDestinationID())->getInfo();
+		copy.dijkstraShortestPath(d_node1);	
+		weight = weightPath(copy, copy.getPath(d_node1, d_node2));
+		cout << u.getId()<< ": " << weight<< endl;
+		
+
+	}
+
+	return g;
+}
+
 /**
  * Joins the two graphs.
  * add a edge bettween the graphs
@@ -34,6 +74,7 @@ Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
 
     return graph_source;
 }
+
 /**
  * Inserts the created user into the users vector. 
 **/
@@ -296,12 +337,13 @@ int main(){
 	Graph<Node> q = r.trimGraph();
 
 	//criar o path 
-	
+	Driver d = Driver(0, 90379615, 288195753, dep, arr, 10, 5, 5);
+	createPath(q, u ,d );
 	
 
 
-	GraphViewer *gv;
-	graphViewer(gv, &q);
+	/*GraphViewer *gv;
+	graphViewer(gv, &q);*/
 	//gv->closeWindow();
 
 	return 0;
