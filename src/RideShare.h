@@ -13,13 +13,17 @@ public:
     Graph<Node> graph_dest;
     Driver driver;
     vector<User> users;
+    vector<Node> source_nodes;
+    vector<Node> dest_nodes;
 
     RideShare(Graph<Node> graph,Graph<Node> graph_dest,  int id, int s, int d, tms dep, tms arr, int dT, int aT, unsigned cap, vector<User> users);
     void trimGraph();
     void removeUsers();
-    vector<Node> getPath_pickUp();
+    void pickUp();
     Graph<Node> getGraphSource();
     Graph<Node> getGraphDest();
+    vector<Node> getSource_nodes();
+    vector<Node> getDest_nodes();
 
 };
 

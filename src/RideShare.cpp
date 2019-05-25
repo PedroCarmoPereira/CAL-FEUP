@@ -95,10 +95,18 @@ Graph<Node> RideShare::getGraphDest(){
     return this->graph_dest;
 }
 
+vector<Node> RideShare::getSource_nodes(){
+    return this->source_nodes;
+}
+
+vector<Node> RideShare::getDest_nodes(){
+    return this->dest_nodes;
+}
+
 /**
  * choose the best users to pick up
 **/
-vector<Node> RideShare::getPath_pickUp(){
+void RideShare::pickUp(){
     map<int, pair<Node,Node> > map; 
     vector<Node> v;
     Node d_n1 = this->graph.findVertex(this->driver.getSourceID())->getInfo();
@@ -115,14 +123,17 @@ vector<Node> RideShare::getPath_pickUp(){
         weight += weightPath(this->graph_dest, v);
         map.insert(make_pair(weight, make_pair(u_n1, u_n2)));
     }
-    vector<Node> v_path;
+    vector<Node> v_s;
+    vector<Node> v_d;
     for(auto u : map){
         if(this->driver.getCurrOcup() < this->driver.getCapacity()){
-            v_path.push_back(u.second.first);
-            v_path.push_back(u.second.second);
+            v_s.push_back(u.second.first);
+            v_d.push_back(u.second.second);
         }
         else
             break;    
     }
-    return v_path;
+    this->source_nodes = v_s;
+    this->dest_nodes = v_d;
+    
 }

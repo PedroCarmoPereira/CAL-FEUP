@@ -12,13 +12,10 @@ using namespace std;
 
 /**
  * Joins the two graphs.
- * add a edge bettween the graphs
 **/
 Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
 
     vector<Vertex<Node> *>  vertexSet = graph_dest.getVertexSet();
-	Node node1 = (*vertexSet.begin())->getInfo();
-
     for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++){
         graph_source.addVertex((*itv)->getInfo());
 	}
@@ -27,12 +24,6 @@ Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
 		for(vector<Edge<Node>>::const_iterator it = adjSet.begin(); it != adjSet.end(); it++)
 			graph_source.addEdge((*itv)->getInfo(), (*it).getDest()->getInfo(),(*it).getWeight() );
 	}
-
-	vertexSet = graph_source.getVertexSet();
-	Node node2 = (*vertexSet.begin())->getInfo();
-	graph_source.addEdge(node1, node2, 1 );
-	graph_source.addEdge(node2, node1, 1 );
-
     return graph_source;
 }
 
@@ -297,20 +288,50 @@ int main(){
 	r.removeUsers();
 	r.trimGraph();
 
-	//get all the nodes we need to go
-	vector<Node> path = r.getPath_pickUp();
+	//get all the nodes we need to go, only users
+	r.pickUp();
+	vector<Node> source_nodes = r.getSource_nodes();
+	vector<Node> dest_nodes = r.getDest_nodes();
 
-	//the graph that have both citys
-	Graph<Node> g_porto_fafe = joinGraph(r.getGraphSource(), r.getGraphDest());
-
-	//use the new graph and the nodes to implement Held–Karp algorithm
-	Node d_n1 = g_porto_fafe.findVertex(90379615)->getInfo();
-    Node d_n2 = g_porto_fafe.findVertex(288195753)->getInfo();
-	g_porto_fafe.getTSP_Path(d_n1, d_n2);
-
+	//get the final graphs, remove the other nodes
+	g_porto = r.getGraphSource();
+	g_fafe = r.getGraphDest();
+	for(auto v : g_porto.getVertexSet()){
+		if(v->getInfo().id != 90379615 && v->getInfo().id !=288195753){
+			bool to_remove = true;
+			for(auto u : source_nodes){
+				if(v->getInfo().id == u.id)
+					to_remove = false;
+			}
+			if(to_remove)
+				g_porto.removeVertex(v->getInfo());	
+		}
+	}
+	for(auto v : g_fafe.getVertexSet()){
+		if(v->getInfo().id != 90379615 && v->getInfo().id !=288195753){
+			bool to_remove = true;
+			for(auto u : dest_nodes){
+				if(v->getInfo().id == u.id)
+					to_remove = false;
+			}
+			if(to_remove)
+				g_fafe.removeVertex(v->getInfo());	
+		}
+	}
+	
 	//GraphViewer
+	//Join the two final graphs
 	GraphViewer *gv;
-	graphViewer(gv, &g_porto_fafe);
+	Graph<Node> q = joinGraph(g_porto, g_fafe);
+	graphViewer(gv, &q);
+
+	//use the graphs and the nodes to implement Held–Karp algorithm
+	Node d_n1 = g_porto.findVertex(90379615)->getInfo();
+    Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
+	g_porto.getTSP_Path(d_n1);
+	g_fafe.getTSP_Path(d_n2);
+
+
 	//gv->closeWindow();
 
 	return 0;

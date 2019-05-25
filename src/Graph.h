@@ -11,6 +11,7 @@
 #include <cmath>
 #include <algorithm>
 #include "MutablePriorityQueue.h"
+//#include "utils.h"
 
 using namespace std;
 
@@ -37,6 +38,9 @@ public:
 	Vertex(T in);
 	bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 	T getInfo() const;
+	void setInfo(T info){
+		this->info = info;
+	}
 	vector<Edge<T> > getAdj() const;
 	double getDist() const;
 	Vertex *getPath() const;
@@ -138,7 +142,7 @@ public:
 	vector<T> getPath(const T &origin,const T &dest) const;
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	Vertex<T> findVertexWithId(int id) const;
-	void getTSP_Path(const T &s, const T &d);
+	void getTSP_Path( T &s);
 };
 
 template <class T>
@@ -437,10 +441,79 @@ return vertexSet[i];
 return -1;
 }
 
+/**************** Held–Karp ************/
+template<class T>
+void setup(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+	/*for(size_t i = 0; i < N; i++){
+		if(i == s.id) continue;
+		//store the optimal value from node s to each node i
+		memo[i][1 << s.id | 1 << i] = matrix[s.id][i];
+	}*/
+}
 
 template<class T>
-void Graph<T>::getTSP_Path(const T &s, const T &d){
+void solve(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+	/*for(size_t r =3; i < N; r++){
+	//the combinations function generates all bit sets of size N with r bits set to 1. 
+	//combinations(3,4) = {0111, 1011, 1110}
+		
+	}*/
 
+
+}
+
+template<class T>
+int findMinCost(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+
+	return 0;
+}
+
+template<class T>
+int findOptimalTour(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+
+	return 0;
+}
+
+template<class T>
+void Graph<T>::getTSP_Path( T &s){
+
+	int N = vertexSet.size();
+	//set id of graph nodes between 0 and N-1
+	for (unsigned i = 0; i < N; i++){
+		if(s.id == vertexSet[i]->getInfo().id) s.id =i; 	//s - the start node 
+		vertexSet[i]->setInfo(i);
+	}
+
+	//2D adjacency matrix representing graph
+	vector< vector<int> > matrix(N, vector<int>(N));
+	int id;
+	for (unsigned l = 0; l < N; l++){
+		for (unsigned c = 0; c <  vertexSet[l]->getAdj().size(); c++){
+			id = vertexSet[l]->getAdj()[c].getDest()->getInfo().id;
+			matrix[l][id] = vertexSet[l]->getAdj()[c].getWeight();		
+		}
+	}
+
+	//displyay matrix
+	for (unsigned l = 0; l < N; l++){
+		cout << l << " | ";
+		for (unsigned c = 0; c < N; c++){
+			cout << matrix[l][c] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+/*
+	//initialize memo table
+	//fill table with null values
+	vector< vector<int> > memo(N, vector<int>(pow(2,N))); //memo = 2D table of size N by 2^N 
+
+	setup(matrix, memo, s, N);
+	solve(matrix, memo, s, N);
+	int minCost = findMinCost(matrix, memo, s, N);
+	int tour = findOptimalTour(matrix, memo, s, N);
+
+	//return (minCost, tour);*/
 
 }
 
