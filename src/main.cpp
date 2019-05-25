@@ -11,45 +11,6 @@
 using namespace std;
 
 /**
- * get the shortest path (only get one user) 0 ? ?' 0'
- * get the shortest path with the first user vertexs (only get one user) 0 ? ? ?' ?' 0'
- * get the shortest path with the first and second users vertexs (only get one user) ...
- * (sem contar com o tempo por enquanto)
-**/
-Graph<Node> createPath(Graph<Node> g, vector<User> users, Driver d ){
-
-	Node d_node1 = g.findVertex(d.getSourceID())->getInfo();
-	Node d_node2 = g.findVertex(d.getDestinationID())->getInfo();
-	//get the shortest path (only get one user)
-	vector<Node> v;
-	int weight = 0;
-	for(auto u : users){
-		Graph<Node> copy = g; //graph with the vertexs that matters
-		for(auto u2 : users){
-			if(u.getId() != u2.getId()){
-				Node u2_node1 = copy.findVertex(u2.getSourceID())->getInfo();
-				Node u2_node2 = copy.findVertex(u2.getDestinationID())->getInfo();
-			/*	copy.removeVertex(u2_node1);
-				copy.removeVertex(u2_node2);*/
-				cout << "removi" << endl;
-			}
-		}
-		/*GraphViewer *gv;
-		graphViewer(gv, &copy);*/
-
-		Node u_node1 = g.findVertex(u.getSourceID())->getInfo();
-		Node u_node2 = g.findVertex(u.getDestinationID())->getInfo();
-		copy.dijkstraShortestPath(d_node1);	
-		weight = weightPath(copy, copy.getPath(d_node1, d_node2));
-		cout << u.getId()<< ": " << weight<< endl;
-		
-
-	}
-
-	return g;
-}
-
-/**
  * Joins the two graphs.
  * add a edge bettween the graphs
 **/
@@ -331,19 +292,25 @@ int main(){
 	//get users saved in users.txt
 	vector<User> u = readUsers("users.txt");
 
-	//process Porto and fafe graphs to a new graph with all of reachable vertexs of users and driver
-	Graph<Node> g_porto_fafe = joinGraph(g_porto, g_fafe);
-	RideShare r = RideShare(g_porto_fafe, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
-	Graph<Node> q = r.trimGraph();
+	//process Porto and fafe graphs
+	RideShare r = RideShare(g_porto,g_fafe, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
+	r.removeUsers();
+	r.trimGraph();
 
-	//criar o path 
-	Driver d = Driver(0, 90379615, 288195753, dep, arr, 10, 5, 5);
-	createPath(q, u ,d );
-	
+	//get all the nodes we need to go
+	vector<Node> path = r.getPath_pickUp();
 
+	//the graph that have both citys
+	Graph<Node> g_porto_fafe = joinGraph(r.getGraphSource(), r.getGraphDest());
 
-	/*GraphViewer *gv;
-	graphViewer(gv, &q);*/
+	//use the new graph and the nodes to implement Held–Karp algorithm
+	Node d_n1 = g_porto_fafe.findVertex(90379615)->getInfo();
+    Node d_n2 = g_porto_fafe.findVertex(288195753)->getInfo();
+	g_porto_fafe.getTSP_Path(d_n1, d_n2);
+
+	//GraphViewer
+	GraphViewer *gv;
+	graphViewer(gv, &g_porto_fafe);
 	//gv->closeWindow();
 
 	return 0;

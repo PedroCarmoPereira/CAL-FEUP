@@ -138,6 +138,7 @@ public:
 	vector<T> getPath(const T &origin,const T &dest) const;
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	Vertex<T> findVertexWithId(int id) const;
+	void getTSP_Path(const T &s, const T &d);
 };
 
 template <class T>
@@ -434,6 +435,13 @@ Vertex<T> Graph<T>::findVertexWithId(int id) const{
 if (vertexSet[i]->info == id)
 return vertexSet[i];
 return -1;
+}
+
+
+template<class T>
+void Graph<T>::getTSP_Path(const T &s, const T &d){
+
+
 }
 
 
