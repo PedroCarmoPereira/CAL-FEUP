@@ -278,7 +278,7 @@ int main(){
 	GraphViewer *gv;
 	graphViewer(gv, &q);
 
-	gv->closeWindow();
+	//gv->closeWindow();
 
 	return 0;
 }

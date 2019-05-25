@@ -32,9 +32,13 @@ Graph<Node> RideShare::trimGraph(){
             this->graph.dijkstraShortestPath(n1);
             const vector<Node> &v = this->graph.getPath(n1, n2);
             if(!v.empty())trimmedGraph.addEdge(n1, n2, weightPath(this->graph, v));
+    
         }
-    vector<Vertex<Node > * > vertexSet = this->graph.getVertexSet();
-    /*for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++)
-        if ((*itv)->getPath() == nullptr) trimmedGraph.removeVertex((*itv)->getInfo());*/
+
+    vector<Vertex<Node> *>  vertexSet = trimmedGraph.getVertexSet();
+    for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++)
+        if ((*itv)->getAdj().size() == 0) 
+            trimmedGraph.removeVertex((*itv)->getInfo());
+
     return trimmedGraph;
 }
