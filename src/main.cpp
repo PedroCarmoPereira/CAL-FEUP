@@ -3,6 +3,7 @@
 #include <ctime>
 #include "Graph.h"
 #include "utils.h"
+#include "HK.h"
 #include "graphviewer.h"
 #include "User.h"
 #include "Driver.h"
@@ -266,7 +267,7 @@ Graph<Node> CreateTestGraph() {
  * Inicializes the user graph.
  **/
 int main(){
-
+/*
 	//get Porto and Fafe graphs
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
@@ -324,7 +325,7 @@ int main(){
 	/*GraphViewer *gv;
 	Graph<Node> q = joinGraph(g_porto, g_fafe);
 	graphViewer(gv, &q);*/
-
+/*
 	//use the graphs and the nodes to implement Held–Karp algorithm
 	Node d_n1 = g_porto.findVertex(90379615)->getInfo();
   Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
@@ -333,6 +334,10 @@ int main(){
 
 
 	//gv->closeWindow();
+*/
 
+	vector<unsigned> v = combinations(2, 4);
+	for (vector<unsigned>::const_iterator it = v.begin(); it != v.end(); it++)
+		cout << *it << endl;
 	return 0;
 }

@@ -8,6 +8,7 @@
 #include <queue>
 #include <list>
 #include <limits>
+#include <climits>
 #include <cmath>
 #include <algorithm>
 #include "MutablePriorityQueue.h"
@@ -504,8 +505,7 @@ void Graph<T>::getTSP_Path( T &s){
 		cout << endl;
 	}
 	cout << endl;
-	
-	vector<vector <int>> memo(N, vector<int>(pow(2, N)));
+	vector<vector <int>> memo(N, vector<int>(pow(2, N), INT_MAX));
 	setup(matrix, memo, s, N);
 	for(int i = 0; i < N; i++)
 		for(int j = 0; j < pow(2, N); j++) cout << "MEMO[" << i << "][" << j << "]: " << memo.at(i).at(j) << endl;
