@@ -6,21 +6,12 @@
 
 using namespace std;
 
-unsigned numberOfBitsSet(unsigned value){
-    unsigned bits = 0;
-    while(value){
-        if (value & 1) bits++;
-        value = value >> 1;
-    }
-    return bits;
-}
+unsigned numberOfBitsSet(unsigned value);
 
-vector<unsigned> combinations(int r, int N){
-    vector<unsigned> combos;
-    for(unsigned i = 0; i <= pow(2, N); i++)
-        if (numberOfBitsSet(i) == r) combos.push_back(i);
+void combinations_aux(unsigned set, unsigned at, unsigned r, unsigned N, vector<unsigned> & subsets);
 
-    return combos;
-}
+vector<unsigned> combinations(int r, int N);
+
+bool notIn(unsigned i, unsigned subset);
 
 #endif

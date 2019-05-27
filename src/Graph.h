@@ -11,6 +11,7 @@
 #include <climits>
 #include <cmath>
 #include <algorithm>
+#include "HK.h"
 #include "MutablePriorityQueue.h"
 //#include "utils.h"
 
@@ -143,7 +144,7 @@ public:
 	vector<T> getPath(const T &origin,const T &dest) const;
 	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	Vertex<T> findVertexWithId(int id) const;
-	void getTSP_Path( T &s);
+	vector<unsigned> getTSP_Path( T &s);
 };
 
 template <class T>
@@ -454,30 +455,86 @@ void setup(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int
 
 template<class T>
 void solve(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
-	/*for(size_t r =3; i < N; r++){
-	//the combinations function generates all bit sets of size N with r bits set to 1. 
-	//combinations(3,4) = {0111, 1011, 1110}
-		
-	}*/
+	/*
+	for (int r = 3; r <= N; r++) {
+      for (int subset : combinations(r, N)) {
+        if (notIn(start, subset)) continue;
+        for (int next = 0; next < N; next++) {
+          if (next == start || notIn(next, subset)) continue;
+          int subsetWithoutNext = subset ^ (1 << next);
+          double minDist = Double.POSITIVE_INFINITY;
+          for (int end = 0; end < N; end++) {
+            if (end == start || end == next || notIn(end, subset)) continue;
+            double newDistance = memo[end][subsetWithoutNext] + distance[end][next];
+            if (newDistance < minDist) {
+              minDist = newDistance;
+            }
+          }
+          memo[next][subset] = minDist;
+        }
+      }
+    }
+	*/
+
+	for(int r = 3; r <= N; r++){
+		for(auto subset:combinations(r, N)){
+			if(notIn(s.id, subset)) continue;
+			for(int next = 0; next < N; next++){
+				if(next == s.id || notIn(next, subset)) continue;
+				int subsetWithoutNext = subset ^ (1 << next);
+				int minDist = INT_MAX;
+				for(int end = 0; end < N; end++){
+					if (end == s.id || end == next || notIn(end, subset)) continue;
+					int newDistance = memo[end][subsetWithoutNext] + matrix[end][next];
+					if (newDistance < minDist) minDist = newDistance;
+				}
+				memo[next][subset] = minDist;
+			}
+		}
+	}
 
 
 }
 
 template<class T>
 int findMinCost(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+    unsigned end_state = (1 << N) -  1;
+		int minTourCost = INT_MAX;
+		for(unsigned e = 0; e < N; e++){
+			if (e == s.id) continue;
+			int tourCost = memo[e][end_state];
+			if (tourCost < minTourCost) minTourCost = tourCost;
+		}
 
-	return 0;
+		return minTourCost;
 }
 
 template<class T>
-int findOptimalTour(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+vector<unsigned> findOptimalTour(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
+	unsigned lastIndex = s.id;
+	unsigned state = (1 << N) - 1;
+	vector<unsigned> tour(N, INT_MAX);
+	for(int i = N - 1; i >= 1; i--){
+		unsigned index = -1;
+		for(int j = 0; j < N; j++){
+			if(j == s.id || notIn(j, state)) continue;
+			if(index == -1) index = j;
+			unsigned prevDist = memo[index][state] + matrix[index][lastIndex];
+			unsigned newDist = memo[j][state] + matrix[j][lastIndex];
+			if(newDist < prevDist) index = j;
+		}
+		tour[i] = index;
+		state ^= (1 << index);
+		lastIndex = index; 
+	}
 
-	return 0;
+	tour[0] = s.id;
+	return tour;
 }
 
  
 template<class T>
-void Graph<T>::getTSP_Path( T &s){
+vector<unsigned> Graph<T>::getTSP_Path( T &s){
 
 	int N = vertexSet.size();
 	//set id of graph nodes between 0 and N-1
@@ -507,32 +564,13 @@ void Graph<T>::getTSP_Path( T &s){
 	cout << endl;
 	vector<vector <int>> memo(N, vector<int>(pow(2, N), INT_MAX));
 	setup(matrix, memo, s, N);
-	for(int i = 0; i < N; i++)
-		for(int j = 0; j < pow(2, N); j++) cout << "MEMO[" << i << "][" << j << "]: " << memo.at(i).at(j) << endl;
-/*	for (int x = 0; x < memo.size(); x++)
-		for(int y = 0; y < memo.at(x).size(); y++)
-			cout << "Memo[" << x << "][" << y << "]: " <<  memo.at(x).at(y) << endl;*/
-	//setup(matrix, memo, s, N);
-	/*vector<int> x(2^N, 0);
- 	vector<vector<int> > memo(N, x);
-	
-
-	for(int x = 0; x < memo.size(); x++){
-		cout << "Line: " << x << endl;
-		for(int y = 0; y < memo.at(x).size(); y++)
-			cout << memo.at(x).at(y) << " ";
-		cout << endl;
-	}*/
-/*
-	//initialize memo table
-	//fill table with null values
-	vector< vector<int> > memo(N, vector<int>(pow(2,N))); //memo = 2D table of size N by 2^N 
-
 	solve(matrix, memo, s, N);
-	int minCost = findMinCost(matrix, memo, s, N);
-	int tour = findOptimalTour(matrix, memo, s, N);
-
-	//return (minCost, tour);*/
+	for (int x = 0; x < memo.size(); x++)
+		for(int y = 0; y < memo.at(x).size(); y++)
+			cout << "Memo[" << x << "][" << y << "]: " <<  memo.at(x).at(y) << endl;
+	cout << "Min cost: ";
+	cout << findMinCost(matrix, memo, s, N) << endl;
+	return findOptimalTour(matrix, memo, s, N);
 
 }
 

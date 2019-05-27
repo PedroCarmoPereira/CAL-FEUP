@@ -3,7 +3,6 @@
 #include <ctime>
 #include "Graph.h"
 #include "utils.h"
-#include "HK.h"
 #include "graphviewer.h"
 #include "User.h"
 #include "Driver.h"
@@ -267,7 +266,7 @@ Graph<Node> CreateTestGraph() {
  * Inicializes the user graph.
  **/
 int main(){
-/*
+
 	//get Porto and Fafe graphs
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
@@ -287,6 +286,7 @@ int main(){
 	//process Porto and fafe graphs
 	RideShare r = RideShare(g_porto,g_fafe, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
 	r.removeUsers();
+	for(int i = 0; i < r.users.size(); i++) cout << r.users.at(i).getSourceID() << " -> " << r.users.at(i).getDestinationID() << endl;
 	r.trimGraph();
 
 	//get all the nodes we need to go, only users
@@ -325,19 +325,13 @@ int main(){
 	/*GraphViewer *gv;
 	Graph<Node> q = joinGraph(g_porto, g_fafe);
 	graphViewer(gv, &q);*/
-/*
+
 	//use the graphs and the nodes to implement Held–Karp algorithm
-	Node d_n1 = g_porto.findVertex(90379615)->getInfo();
-  Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
-	g_porto.getTSP_Path(d_n1);
-	g_fafe.getTSP_Path(d_n2);
-
-
+	Node d_n1 = g_porto.findVertex(311887112)->getInfo();
+  //Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
+	//cout << "OPTIMAL PATH:" << endl;
+	for( auto u : g_porto.getTSP_Path(d_n1)) cout << u << " \t" << endl;
+	//g_fafe.getTSP_Path(d_n2);
 	//gv->closeWindow();
-*/
-
-	vector<unsigned> v = combinations(2, 4);
-	for (vector<unsigned>::const_iterator it = v.begin(); it != v.end(); it++)
-		cout << *it << endl;
 	return 0;
 }
