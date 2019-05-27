@@ -321,13 +321,13 @@ int main(){
 	
 	//GraphViewer
 	//Join the two final graphs
-	GraphViewer *gv;
+	/*GraphViewer *gv;
 	Graph<Node> q = joinGraph(g_porto, g_fafe);
-	graphViewer(gv, &q);
+	graphViewer(gv, &q);*/
 
 	//use the graphs and the nodes to implement Held–Karp algorithm
 	Node d_n1 = g_porto.findVertex(90379615)->getInfo();
-    Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
+  Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
 	g_porto.getTSP_Path(d_n1);
 	g_fafe.getTSP_Path(d_n2);
 

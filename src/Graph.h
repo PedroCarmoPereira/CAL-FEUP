@@ -444,11 +444,11 @@ return -1;
 /**************** Held–Karp ************/
 template<class T>
 void setup(vector< vector<int> > matrix, vector< vector<int> > &memo, T &s,  int N){
-	/*for(size_t i = 0; i < N; i++){
+	for(size_t i = 0; i < N; i++){
 		if(i == s.id) continue;
 		//store the optimal value from node s to each node i
 		memo[i][1 << s.id | 1 << i] = matrix[s.id][i];
-	}*/
+	}
 }
 
 template<class T>
@@ -474,6 +474,7 @@ int findOptimalTour(vector< vector<int> > matrix, vector< vector<int> > &memo, T
 	return 0;
 }
 
+ 
 template<class T>
 void Graph<T>::getTSP_Path( T &s){
 
@@ -503,12 +504,30 @@ void Graph<T>::getTSP_Path( T &s){
 		cout << endl;
 	}
 	cout << endl;
+	
+	vector<vector <int>> memo(N, vector<int>(pow(2, N)));
+	setup(matrix, memo, s, N);
+	for(int i = 0; i < N; i++)
+		for(int j = 0; j < pow(2, N); j++) cout << "MEMO[" << i << "][" << j << "]: " << memo.at(i).at(j) << endl;
+/*	for (int x = 0; x < memo.size(); x++)
+		for(int y = 0; y < memo.at(x).size(); y++)
+			cout << "Memo[" << x << "][" << y << "]: " <<  memo.at(x).at(y) << endl;*/
+	//setup(matrix, memo, s, N);
+	/*vector<int> x(2^N, 0);
+ 	vector<vector<int> > memo(N, x);
+	
+
+	for(int x = 0; x < memo.size(); x++){
+		cout << "Line: " << x << endl;
+		for(int y = 0; y < memo.at(x).size(); y++)
+			cout << memo.at(x).at(y) << " ";
+		cout << endl;
+	}*/
 /*
 	//initialize memo table
 	//fill table with null values
 	vector< vector<int> > memo(N, vector<int>(pow(2,N))); //memo = 2D table of size N by 2^N 
 
-	setup(matrix, memo, s, N);
 	solve(matrix, memo, s, N);
 	int minCost = findMinCost(matrix, memo, s, N);
 	int tour = findOptimalTour(matrix, memo, s, N);
