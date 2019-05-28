@@ -311,11 +311,19 @@ vector <User> readUsers(string File){
 		arr = strtok(NULL, "(,)");
 		dT = atof(strtok(NULL, "(,)"));
 		aT = atof(strtok(NULL, "(,)"));
-
+		time_t temp;
+		time(&temp);
+		_dep = _arr = *localtime(&temp);
 		_dep.tm_hour = atoi(strtok(dep, "."));
 		_dep.tm_min = atoi(strtok(NULL, "."));
 		_arr.tm_hour = atoi(strtok(arr, "."));
 		_arr.tm_min = atoi(strtok(NULL, "."));
+
+		if(_arr.tm_hour < _dep.tm_hour){
+			_arr.tm_mday++;
+			_arr.tm_wday++;
+			_arr.tm_yday++;
+		}
 
 		//cout <<" "<<  id <<" " << sourceID <<" " << destinationID <<" "<< _dep.tm_hour <<" " << _dep.tm_min  <<" "<< _arr.tm_hour  <<" "<< _arr.tm_min  <<" "<< dT  <<" "<<  aT << endl;
 		User u = User( id, sourceID, destinationID, _dep, _arr, dT, aT, false);

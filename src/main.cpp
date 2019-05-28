@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#define DIST_PORTO_FAFE		683000
+#define DIST_PORTO_FAFE		68300
 
 /**
  * Joins the two graphs.
@@ -33,11 +33,21 @@ Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
  * Inserts the driver.
 **/
 void insertDriver(Driver &driver){
+	//Driver(0, 90379615, 288195753, dep, arr, 10, 10, 5)
+	/*
+	time_t now = time(0);
+	tms dep = *localtime(&now);
+	tms arr = *localtime(&now);
+	dep.tm_hour = 10;
+	dep.tm_min = 45;
+	arr.tm_hour = 23;
+	arr.tm_min = 59;
+	*/
 
 	time_t now = time(0);
-	tms *dep, *arr;
-	dep = gmtime(&now);
-	arr = gmtime(&now);
+	tms dep, arr;
+	dep = *localtime(&now);
+	arr = *localtime(&now);
 
 	int id;
 	cout << "id:"; 
@@ -52,19 +62,19 @@ void insertDriver(Driver &driver){
 	cin >> d;
 
 	cout << "departure hour:";
-	cin >> dep->tm_hour;
+	cin >> dep.tm_hour;
 	cout << "departure minute:";
-	cin >> dep->tm_min;
+	cin >> dep.tm_min;
 
 	cout << "arrival hour:";
-	cin >> arr->tm_hour;
+	cin >> arr.tm_hour;
 	cout << "arrival minute:";
-	cin >> arr->tm_min;
+	cin >> arr.tm_min;
 
-	if(arr->tm_hour < dep->tm_hour){
-		arr->tm_mday++;
-		arr->tm_wday++;
-		arr->tm_yday++;
+	if(arr.tm_hour < dep.tm_hour){
+		arr.tm_mday++;
+		arr.tm_wday++;
+		arr.tm_yday++;
 	}
 
 	int dT;
@@ -79,7 +89,7 @@ void insertDriver(Driver &driver){
 	cout << "vehicle capacity:"; 
 	cin >> cap;
 
-	driver = Driver(id, s, d, *dep, *arr, dT, aT, cap);
+	driver = Driver(id, s, d, dep, arr, dT, aT, cap);
 }
 
 /**
@@ -149,34 +159,45 @@ void displayUsers(vector<User> v){
 **/
 void menu(vector<User> & v, Driver & driver){
 	bool var_exit = false;
+	bool driver_flag = false;
 	while(!var_exit){
 
 		cout << "Welcome to RideSharing! Please choose a option." << endl;
-    cout << "1-Insert Driver." << endl;
-		cout << "2-Insert new users." << endl;
-		cout << "3-See all users." << endl;
-		cout << "4-Start Program." << endl;
-		cout << "5-Exit." << endl;
+    	cout << "1-Insert Driver." << endl;
+		cout << "2-Read users from file." << endl;
+		cout << "3-Insert new users." << endl;
+		cout << "4-See all users." << endl;
+		cout << "5-Start Program." << endl;
+		cout << "6-Exit." << endl;
 		int s;
 		cin >> s; 
 
 		switch (s){
 			case 1:
 					insertDriver(driver);
+					driver_flag = true;
 					cout << endl;
 					break;
 			case 2:
-					insertUser(v);
+					v = readUsers("users.txt");
 					cout << endl;
 					break;
 			case 3:
-					displayUsers(v);
+					insertUser(v);
 					cout << endl;
 					break;
 			case 4:
-					var_exit = true;
+					displayUsers(v);
+					cout << endl;
 					break;
 			case 5:
+					if(!driver_flag){
+						cout << "Error! Insert driver!" << endl;
+						break;
+					}
+					var_exit = true;
+					break;
+			case 6:
 					cout << "Exiting.." << endl;
 					exit(0);
 			default:
@@ -186,136 +207,6 @@ void menu(vector<User> & v, Driver & driver){
 					break;
 		}
 	}
-}
-
-/**
- * Auxiliar funtion. 
- * Creats the graph that represents the city map.
- * @return myGraph
-**/
-Graph<Node> CreateTestGraph() {
-	//BASEADO NO DO BATOSTA		
-  Graph<Node> myGraph;
-	myGraph.addVertex(Node(1, coords(16,  130)));
-	myGraph.addVertex(Node(2, coords(64,  324)));
-	myGraph.addVertex(Node(3, coords(87,  709)));
-	myGraph.addVertex(Node(4, coords(247, 733)));
-	myGraph.addVertex(Node(5, coords(270, 534)));
-	myGraph.addVertex(Node(6, coords(378, 522)));
-	myGraph.addVertex(Node(7, coords(420, 349)));
-	myGraph.addVertex(Node(8, coords(445, 156)));
-	myGraph.addVertex(Node(9, coords(223,  91)));
-	myGraph.addVertex(Node(10, coords(205, 321)));
-	myGraph.addVertex(Node(11, coords(139, 286)));
-	myGraph.addVertex(Node(12, coords(175, 493)));
-	myGraph.addVertex(Node(13, coords(354, 748)));
-	myGraph.addVertex(Node(14, coords(597, 727)));
-	myGraph.addVertex(Node(15, coords(649, 526)));
-	myGraph.addVertex(Node(16, coords(541, 499)));
-	myGraph.addVertex(Node(17, coords(508, 628)));
-	myGraph.addVertex(Node(18, coords(462, 130)));
-	myGraph.addVertex(Node(19, coords(712, 270)));
-	myGraph.addVertex(Node(20, coords(595, 238)));
-	myGraph.addVertex(Node(21, coords(615, 141)));
-	myGraph.addVertex(Node(22, coords(528, 150)));
-	myGraph.addVertex(Node(23, coords(519, 217)));
-	myGraph.addVertex(Node(24, coords(457, 45)));
-	myGraph.addVertex(Node(25, coords(710, 45)));
-	myGraph.addVertex(Node(26, coords(153, 234)));
-	
-	Vertex<Node> *a, *b;
-	a = myGraph.findVertex(Node(1));
-	b = myGraph.findVertex(Node(2));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(3));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(4));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(13));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(14));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(15));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(16));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(17));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(18));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(13));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(4));
-	b = myGraph.findVertex(Node(5));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(6));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(7));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(8));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(9));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(10));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(12));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(7));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(11));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(2));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(26));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(19));
-	b = myGraph.findVertex(Node(15));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(25));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(8));
-	b = myGraph.findVertex(Node(24));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(25));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(9));
-	b = myGraph.findVertex(Node(1));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(19));
-	b = myGraph.findVertex(Node(20));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(21));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(22));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(23));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-	b = myGraph.findVertex(Node(20));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(12));
-	b = myGraph.findVertex(Node(5));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	a = myGraph.findVertex(Node(9));
-	b = myGraph.findVertex(Node(24));
-	myGraph.addEdge(a->getInfo(), b->getInfo(),  edgeWeight(*a, *b));
-	myGraph.addEdge(b->getInfo(), a->getInfo(),  edgeWeight(*a, *b));
-  return myGraph;
 }
 
 /**
@@ -333,31 +224,14 @@ int main(){
 	setFiles(FAFE, nodeFile, edgeFile);
 	Graph<Node> g_arr = readFiles(nodeFile, edgeFile);
 
-	// --- AUXILIAR CODE ---
-	//get Driver info
-	time_t now = time(0);
-	tms dep = *localtime(&now);
-	tms arr = *localtime(&now);
-	arr.tm_hour++;
-	Driver driver(0, 90379615, 288195753, dep, arr, 10, 5, 5);
-
-	//get users saved in users.txt
-	vector<User> u = readUsers("users.txt");
-	//------------------------
-
-	/**
-	 * REAL CODE
-	 * Driver driver;
-	 * vector<User> u;
-	 * menu(u, driver);
-	*/
+	Driver driver;
+	vector<User> u;
+	menu(u, driver);
 
 	//process Porto and fafe graphs
 	RideShare r = RideShare(g_dep,g_arr, driver, u);
-	r.removeUsers();//13->7 retira 6 em vez de 3
+	r.removeUsers();
 	r.trimGraph();
-	cout << "---- "<< r.getGraphSource().getNumVertex() << endl;
-	cout << "---- "<< r.getGraphDest().getNumVertex() << endl;
 
 	//get all the nodes we need to go, only users
 	r.pickUp();
@@ -389,22 +263,24 @@ int main(){
 				g_arr.removeVertex(v->getInfo());	
 		}
 	}
-
-	
 	//GraphViewer
 	//Join the two final graphs
+	/*
 	GraphViewer *gv;
 	Graph<Node> q = joinGraph(g_dep, g_arr);
 	graphViewer(gv, &q);
+	*/
 
 	//use the graphs and the nodes to implement Held–Karp algorithm
 	Node d_n1 = g_dep.findVertex(r.driver.getSourceID())->getInfo();
 	Node d_n2 = g_arr.findVertex(r.driver.getDestinationID())->getInfo();
-	cout << "OPTIMAL DEP PATH:" << endl;
+	
+	cout << "\nOPTIMAL PATH ORIGIN" << endl;
 	for( auto u : g_dep.getTSP_Path(d_n1, false)) cout << u << " \t" << endl;
-
-	cout << "OPTIMAL ARR PATH:" << endl;
+	
+	cout << "\nOPTIMAL PATH DESTINATION" << endl;
 	for( auto u : g_arr.getTSP_Path(d_n2, true)) cout << u << " \t" << endl;
 	//gv->closeWindow();
+
 	return 0;
 }
