@@ -7,7 +7,7 @@ pid_t GraphViewer::procId = NULL;
 #elif __APPLE__
 pid_t GraphViewer::procId = 0;
 #endif
-short GraphViewer::port = 6775;
+short GraphViewer::port = 6765;
 
 GraphViewer::GraphViewer(int width, int height, bool dynamic) {
 	initialize(width, height, dynamic, GraphViewer::port);

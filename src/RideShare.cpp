@@ -129,6 +129,7 @@ void RideShare::pickUp(){
         if(this->driver.getCurrOcup() < this->driver.getCapacity()){
             v_s.push_back(u.second.first);
             v_d.push_back(u.second.second);
+            this->driver.setCurrOcup(this->driver.getCurrOcup()+1);
         }
         else
             break;    

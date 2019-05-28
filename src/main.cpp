@@ -287,8 +287,10 @@ int main(){
 
 	//process Porto and fafe graphs
 	RideShare r = RideShare(g_dep,g_arr, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
-	r.removeUsers();
+	r.removeUsers();//13->7 retira 6 em vez de 3
 	r.trimGraph();
+	cout << "---- "<< r.getGraphSource().getNumVertex() << endl;
+	cout << "---- "<< r.getGraphDest().getNumVertex() << endl;
 
 	//get all the nodes we need to go, only users
 	r.pickUp();
@@ -320,16 +322,17 @@ int main(){
 				g_arr.removeVertex(v->getInfo());	
 		}
 	}
+
 	
 	//GraphViewer
 	//Join the two final graphs
-	/*GraphViewer *gv;
+	GraphViewer *gv;
 	Graph<Node> q = joinGraph(g_dep, g_arr);
-	graphViewer(gv, &q);*/
+	graphViewer(gv, &q);
 
 	//use the graphs and the nodes to implement Held–Karp algorithm
 	Node d_n1 = g_dep.findVertex(r.driver.getSourceID())->getInfo();
-  Node d_n2 = g_arr.findVertex(r.driver.getDestinationID())->getInfo();
+	Node d_n2 = g_arr.findVertex(r.driver.getDestinationID())->getInfo();
 	cout << "OPTIMAL DEP PATH:" << endl;
 	for( auto u : g_dep.getTSP_Path(d_n1, false)) cout << u << " \t" << endl;
 
