@@ -22,64 +22,11 @@ Graph<Node> joinGraph(Graph<Node> graph_source, Graph<Node> graph_dest){
         graph_source.addVertex((*itv)->getInfo());
 	}
 	for(vector<Vertex<Node > *>::const_iterator itv = vertexSet.begin(); itv != vertexSet.end(); itv++){
-		vector<Edge<Node> > adjSet = (*itv)->getAdj();
-		for(vector<Edge<Node> >::const_iterator it = adjSet.begin(); it != adjSet.end(); it++)
+		vector<Edge<Node>> adjSet = (*itv)->getAdj();
+		for(vector<Edge<Node>>::const_iterator it = adjSet.begin(); it != adjSet.end(); it++)
 			graph_source.addEdge((*itv)->getInfo(), (*it).getDest()->getInfo(),(*it).getWeight() );
 	}
     return graph_source;
-}
-
-/**
- * Inserts the driver.
-**/
-void insertDriver(Driver &driver){
-
-	time_t now = time(0);
-	tms *dep, *arr;
-	dep = gmtime(&now);
-	arr = gmtime(&now);
-
-	int id;
-	cout << "id:"; 
-	cin >> id;
-
-	int s;
-	cout << "source id:";
-	cin >> s;
-
-	int d;
-	cout << "destination id:";
-	cin >> d;
-
-	cout << "departure hour:";
-	cin >> dep->tm_hour;
-	cout << "departure minute:";
-	cin >> dep->tm_min;
-
-	cout << "arrival hour:";
-	cin >> arr->tm_hour;
-	cout << "arrival minute:";
-	cin >> arr->tm_min;
-
-	if(arr->tm_hour < dep->tm_hour){
-		arr->tm_mday++;
-		arr->tm_wday++;
-		arr->tm_yday++;
-	}
-
-	int dT;
-	cout << "destiantination tolerance:"; 
-	cin >> dT;
-
-	int aT;
-	cout << "arrival tolerance:"; 
-	cin >> aT;
-
-	int cap;
-	cout << "vehicle capacity:"; 
-	cin >> cap;
-
-	driver = Driver(id, s, d, *dep, *arr, dT, aT, cap);
 }
 
 /**
@@ -126,8 +73,12 @@ void insertUser(vector<User>& v){
 	int aT;
 	cout << "arrival tolerance:"; 
 	cin >> aT;
+	
+	int driving;
+	cout << "Driver(1)Passanger(0):";
+	cin >> driving;
 
-	User u = User( id, s, d, *dep, *arr, dT, aT, 0);
+	User u = User( id, s, d, *dep, *arr, dT, aT, driving);
 	v.push_back(u);
 
 }
@@ -147,43 +98,35 @@ void displayUsers(vector<User> v){
  * Funtion that displays the menu and computes the user inputs.
  * @param v
 **/
-void menu(vector<User> & v, Driver & driver){
+void menu(vector<User> & v){
 	bool var_exit = false;
-	while(!var_exit){
+		while(!var_exit){
 
 		cout << "Welcome to RideSharing! Please choose a option." << endl;
-    cout << "1-Insert Driver." << endl;
-		cout << "2-Insert new users." << endl;
-		cout << "3-See all users." << endl;
-		cout << "4-Start Program." << endl;
-		cout << "5-Exit." << endl;
+		cout << "1-Insert new user." << endl;
+		cout << "2-See all users." << endl;
+		cout << "3-Exit." << endl;
 		int s;
 		cin >> s; 
-
-		switch (s){
-			case 1:
-					insertDriver(driver);
-					cout << endl;
-					break;
-			case 2:
-					insertUser(v);
-					cout << endl;
-					break;
-			case 3:
-					displayUsers(v);
-					cout << endl;
-					break;
-			case 4:
-					var_exit = true;
-					break;
-			case 5:
-					cout << "Exiting.." << endl;
-					exit(0);
-			default:
-					cout << "Invalid Option!\n" << endl;
-					cin.clear();
-					cin.ignore();
-					break;
+		switch (s)
+		{
+		case 1:
+			insertUser(v);
+			cout << endl;
+			break;
+		case 2:
+			displayUsers(v);
+			cout << endl;
+			break;
+		case 3:
+			cout << "Exit\n" << endl;
+			var_exit = true;
+			break;
+		default:
+			cout << "Invalid Option!\n" << endl;
+			cin.clear();
+			cin.ignore();
+			break;
 		}
 	}
 }
@@ -333,27 +276,17 @@ int main(){
 	setFiles(FAFE, nodeFile, edgeFile);
 	Graph<Node> g_arr = readFiles(nodeFile, edgeFile);
 
-	// --- AUXILIAR CODE ---
 	//get Driver info
 	time_t now = time(0);
 	tms dep = *localtime(&now);
 	tms arr = *localtime(&now);
 	arr.tm_hour++;
-	Driver driver(0, 90379615, 288195753, dep, arr, 10, 5, 5);
 
 	//get users saved in users.txt
 	vector<User> u = readUsers("users.txt");
-	//------------------------
-
-	/**
-	 * REAL CODE
-	 * Driver driver;
-	 * vector<User> u;
-	 * menu(u, driver);
-	*/
 
 	//process Porto and fafe graphs
-	RideShare r = RideShare(g_dep,g_arr, driver, u);
+	RideShare r = RideShare(g_dep,g_arr, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
 	r.removeUsers();//13->7 retira 6 em vez de 3
 	r.trimGraph();
 	cout << "---- "<< r.getGraphSource().getNumVertex() << endl;

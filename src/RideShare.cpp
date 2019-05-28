@@ -4,9 +4,8 @@
 /**
  * RideShare constructor.
 **/
-RideShare::RideShare(Graph<Node> graph, Graph<Node> graph_dest, Driver driver, vector<User> u){
+RideShare::RideShare(Graph<Node> graph, Graph<Node> graph_dest, int id, int s, int d, tms dep, tms arr, int dT, int aT, unsigned cap, vector<User> u):driver(Driver(id, s, d, dep, arr, dT, aT, cap)){
     this->graph = graph;
-    this->driver = driver;
     this->graph_dest = graph_dest;
     this->users = u;
 }
@@ -57,8 +56,7 @@ void RideShare::trimGraph(){
 }
 
 /**
- * Remove users that are not accessible. 
- * Meaning, all the independent nodes are removed. 
+ * remove users that are not accessible
 **/
 void RideShare::removeUsers(){
 
@@ -85,16 +83,25 @@ void RideShare::removeUsers(){
         }
     }
     //cout << this->users.size() << endl;
+
+
 }
 
+Graph<Node> RideShare::getGraphSource(){
+    return this->graph;
+}
 
-/**
- * Get funtions
-**/
-Graph<Node> RideShare::getGraphSource(){ return this->graph;}
-Graph<Node> RideShare::getGraphDest(){ return this->graph_dest;}
-vector<Node> RideShare::getSource_nodes(){ return this->source_nodes;}
-vector<Node> RideShare::getDest_nodes(){ return this->dest_nodes;}
+Graph<Node> RideShare::getGraphDest(){
+    return this->graph_dest;
+}
+
+vector<Node> RideShare::getSource_nodes(){
+    return this->source_nodes;
+}
+
+vector<Node> RideShare::getDest_nodes(){
+    return this->dest_nodes;
+}
 
 /**
  * choose the best users to pick up
@@ -129,4 +136,5 @@ void RideShare::pickUp(){
     }
     this->source_nodes = v_s;
     this->dest_nodes = v_d;
+    
 }
