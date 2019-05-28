@@ -262,7 +262,8 @@ double weightPath(Graph <Node> &g, const  vector<Node > &v){
 
 /**
  * Converts the weight (represented as distance) to time.
- * @return t;
+ * @param distance
+ * @return time;
 **/
 time_t weightTotime(double w){
 	int x = round(w);
@@ -271,6 +272,11 @@ time_t weightTotime(double w){
 	return t;
 }
 
+/**
+ * Reads all the information regarding the users and parses it into a User vector.
+ * @param file
+ * @return users
+**/
 vector <User> readUsers(string File){
 
 	vector <User> users;
