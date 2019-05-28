@@ -14,12 +14,14 @@ unsigned numberOfBitsSet(unsigned value){
 }
 
 void combinations_aux(unsigned set, unsigned at, unsigned r, unsigned N, vector<unsigned> & subsets){
+    int elementsLeftToPick = N - at;
+    if (elementsLeftToPick < r) return;
     if (r == 0) subsets.push_back(set);
     else {
         for(int i = at; i < N; i++){
-            set |= (1 << i);
+            set ^= (1 << i);
             combinations_aux(set, i + 1, r - 1, N, subsets);
-            set &= ~(1 << i);
+            set ^= (1 << i);
         }
     }
 }

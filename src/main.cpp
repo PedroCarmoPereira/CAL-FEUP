@@ -10,6 +10,8 @@
 
 using namespace std;
 
+#define DIST_PORTO_FAFE		683000
+
 /**
  * Joins the two graphs.
 **/
@@ -270,9 +272,9 @@ int main(){
 	//get Porto and Fafe graphs
 	string nodeFile, edgeFile;
 	setFiles(PORTO, nodeFile, edgeFile);
-	Graph<Node> g_porto = readFiles(nodeFile, edgeFile);
+	Graph<Node> g_dep = readFiles(nodeFile, edgeFile);
 	setFiles(FAFE, nodeFile, edgeFile);
-	Graph<Node> g_fafe = readFiles(nodeFile, edgeFile);
+	Graph<Node> g_arr = readFiles(nodeFile, edgeFile);
 
 	//get Driver info
 	time_t now = time(0);
@@ -284,9 +286,8 @@ int main(){
 	vector<User> u = readUsers("users.txt");
 
 	//process Porto and fafe graphs
-	RideShare r = RideShare(g_porto,g_fafe, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
+	RideShare r = RideShare(g_dep,g_arr, 0, 90379615, 288195753, dep, arr, 10, 5, 5, u);
 	r.removeUsers();
-	for(int i = 0; i < r.users.size(); i++) cout << r.users.at(i).getSourceID() << " -> " << r.users.at(i).getDestinationID() << endl;
 	r.trimGraph();
 
 	//get all the nodes we need to go, only users
@@ -295,43 +296,45 @@ int main(){
 	vector<Node> dest_nodes = r.getDest_nodes();
 
 	//get the final graphs, remove the other nodes
-	g_porto = r.getGraphSource();
-	g_fafe = r.getGraphDest();
-	for(auto v : g_porto.getVertexSet()){
-		if(v->getInfo().id != 90379615 && v->getInfo().id !=288195753){
+	g_dep = r.getGraphSource();
+	g_arr = r.getGraphDest();
+	for(auto v : g_dep.getVertexSet()){
+		if(v->getInfo().id != r.driver.getSourceID() && v->getInfo().id != r.driver.getDestinationID()){
 			bool to_remove = true;
 			for(auto u : source_nodes){
 				if(v->getInfo().id == u.id)
 					to_remove = false;
 			}
 			if(to_remove)
-				g_porto.removeVertex(v->getInfo());	
+				g_dep.removeVertex(v->getInfo());	
 		}
 	}
-	for(auto v : g_fafe.getVertexSet()){
-		if(v->getInfo().id != 90379615 && v->getInfo().id !=288195753){
+	for(auto v : g_arr.getVertexSet()){
+		if(v->getInfo().id != r.driver.getSourceID() && v->getInfo().id != r.driver.getDestinationID()){
 			bool to_remove = true;
 			for(auto u : dest_nodes){
 				if(v->getInfo().id == u.id)
 					to_remove = false;
 			}
 			if(to_remove)
-				g_fafe.removeVertex(v->getInfo());	
+				g_arr.removeVertex(v->getInfo());	
 		}
 	}
 	
 	//GraphViewer
 	//Join the two final graphs
 	/*GraphViewer *gv;
-	Graph<Node> q = joinGraph(g_porto, g_fafe);
+	Graph<Node> q = joinGraph(g_dep, g_arr);
 	graphViewer(gv, &q);*/
 
 	//use the graphs and the nodes to implement Held–Karp algorithm
-	Node d_n1 = g_porto.findVertex(311887112)->getInfo();
-  //Node d_n2 = g_fafe.findVertex(288195753)->getInfo();
-	//cout << "OPTIMAL PATH:" << endl;
-	for( auto u : g_porto.getTSP_Path(d_n1)) cout << u << " \t" << endl;
-	//g_fafe.getTSP_Path(d_n2);
+	Node d_n1 = g_dep.findVertex(r.driver.getSourceID())->getInfo();
+  Node d_n2 = g_arr.findVertex(r.driver.getDestinationID())->getInfo();
+	cout << "OPTIMAL DEP PATH:" << endl;
+	for( auto u : g_dep.getTSP_Path(d_n1, false)) cout << u << " \t" << endl;
+
+	cout << "OPTIMAL ARR PATH:" << endl;
+	for( auto u : g_arr.getTSP_Path(d_n2, true)) cout << u << " \t" << endl;
 	//gv->closeWindow();
 	return 0;
 }
